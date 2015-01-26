@@ -10,34 +10,19 @@ import android.widget.Button;
 
 import eval.wit.ai.calcmahjong.R;
 
-
-public class MenuActivity extends ActionBarActivity {
+public class ScoreActivity extends ActionBarActivity {
+    Button calcBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_score);
 
-        Button playBtn = (Button) findViewById(R.id.play);
-        playBtn.setOnClickListener(new View.OnClickListener() {
+        calcBtn = (Button) findViewById(R.id.calc);
+        calcBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, ScoreActivity.class));
-            }
-        });
-
-        Button playerListBtn = (Button) findViewById(R.id.list);
-        playerListBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, PlayerListActivity.class));
-            }
-        });
-
-        Button settingsBtn = (Button) findViewById(R.id.settings);
-        settingsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                startActivity(new Intent(ScoreActivity.this, MahjongScoringActivity.class));
             }
         });
     }
@@ -46,7 +31,7 @@ public class MenuActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_score, menu);
         return true;
     }
 

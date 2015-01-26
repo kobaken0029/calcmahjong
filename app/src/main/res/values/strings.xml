@@ -2,7 +2,12 @@
 <resources>
 
     <string name="app_name">CalcMahjong</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_score">点数表示</string>
+    <string name="title_activity_mahjong_scoring">点数計算</string>
+    <string name="title_activity_player_record">成績</string>
+    <string name="title_activity_player_list">プレイヤー一覧</string>
+    <string name="title_activity_player_registration">プレイヤー登録</string>
+    <string name="title_activity_result">結果発表</string>
+    <string name="menu">MENU</string>
 
 </resources>

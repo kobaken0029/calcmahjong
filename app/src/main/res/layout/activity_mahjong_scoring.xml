@@ -15,129 +15,166 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="各項目を入力してください。"
         android:textColor="#FFC30062"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:padding="12dp" />
+        android:padding="12dp">
 
-    <LinearLayout
-        android:orientation="vertical"
+        <requestFocus />
+
+    </TextView>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="50dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/calc"
-            android:layout_alignEnd="@+id/calc"
-            android:layout_marginBottom="20dp">
+            android:layout_marginTop="50dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="和了"
-                android:id="@+id/winner"
-                android:layout_marginRight="18dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
 
-            <Spinner
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/winnerSpinner"
-                android:layout_alignTop="@+id/textView9"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_marginBottom="20dp">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="和了"
+                    android:id="@+id/winner"
+                    android:layout_marginRight="35dp" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/winnerSpinner" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="放銃"
-                android:id="@+id/loser"
-                android:layout_marginRight="18dp"
-                android:layout_below="@+id/textView9"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+            </LinearLayout>
 
-            <Spinner
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/loserSpinner"
-                android:layout_above="@+id/textView11"
-                android:layout_alignRight="@+id/spinner"
-                android:layout_alignEnd="@+id/spinner" />
-        </LinearLayout>
+                android:layout_marginBottom="20dp">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="放銃"
+                    android:id="@+id/loser"
+                    android:layout_marginRight="35dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="飜数は？"
-                android:id="@+id/han"
-                android:layout_below="@+id/textView10"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/loserSpinner" />
+            </LinearLayout>
 
-            <Spinner
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/hanSpinner"
-                android:layout_above="@+id/textView12"
-                android:layout_toLeftOf="@+id/spinner"
-                android:layout_toStartOf="@+id/spinner" />
-        </LinearLayout>
+                android:layout_marginBottom="20dp">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="飜数は？"
+                    android:id="@+id/han" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="符数は？"
-                android:id="@+id/fuTxt"
-                android:layout_below="@+id/textView11"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hanSpinner" />
+            </LinearLayout>
 
-            <Spinner
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/fuSpinner"
-                android:layout_alignBottom="@+id/textView12"
-                android:layout_alignRight="@+id/spinner2"
-                android:layout_alignEnd="@+id/spinner2" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_marginBottom="20dp">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="計算"
-        android:textColor="#FFFFFFFF"
-        android:id="@+id/calc"
-        android:background="@drawable/button"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="符数は？"
+                    android:id="@+id/fuTxt" />
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/fuSpinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="親"
+                    android:id="@+id/isParentTxt"
+                    android:layout_marginRight="60dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/isParent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp">
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/honba"
+                    android:text=""
+                    android:hint="何本場かを入力してください。"
+                    android:textColorHint="#88FFFFFF"
+                    android:inputType="number"
+                    android:layout_marginRight="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="本場"
+                    android:id="@+id/honbaTxt" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="計算"
+                    android:textColor="#FFFFFFFF"
+                    android:id="@+id/calc"
+                    android:background="@drawable/button" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

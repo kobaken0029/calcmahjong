@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import eval.wit.ai.calcmahjong.models.entities.Player;
@@ -21,8 +22,20 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
-
         gameCnt = 0;
+
+        // mock
+        Player p1 = new Player(1, "A君", "よろしく");
+        Player p2 = new Player(2, "B君", "よろしく");
+        Player p3 = new Player(3, "C君", "よろしく");
+        Player p4 = new Player(4, "D君", "よろしく");
+
+        ArrayList<Player> ps = new ArrayList<>();
+        ps.add(p1);
+        ps.add(p2);
+        ps.add(p3);
+        ps.add(p4);
+        setPlayers(ps);
     }
 
     /**
@@ -46,17 +59,6 @@ public class AppController extends Application {
      * @return プレイヤー群
      */
     public ArrayList<Player> getPlayers() {
-        // mock
-        Player p1 = new Player(1, "A君", "よろしく");
-        Player p2 = new Player(2, "B君", "よろしく");
-        Player p3 = new Player(3, "C君", "よろしく");
-        Player p4 = new Player(4, "D君", "よろしく");
-        players = new ArrayList<>();
-        players.add(p1);
-        players.add(p2);
-        players.add(p3);
-        players.add(p4);
-
         return players;
     }
 

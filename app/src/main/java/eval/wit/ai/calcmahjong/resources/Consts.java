@@ -4,6 +4,8 @@ package eval.wit.ai.calcmahjong.resources;
  * Created by koba on 2015/01/26.
  */
 public class Consts {
+    public final static int REQUEST_CODE = 200;
+
     /** 飜数 */
     public final static String I_HAN = "1翻";
     public final static String RYAN_HAN = "2翻";
@@ -41,7 +43,7 @@ public class Consts {
     public final static int ZANKU = 3900;
     public final static int TITTI = 7700;
     public final static int ITISAN = 1300;
-    public final static int NIROKU = 2600;
+    public final static int NINROKU = 2600;
     public final static int GOTU = 5200;
     public final static int ITIROKU = 1600;
     public final static int ZANNI = 3200;
@@ -51,11 +53,13 @@ public class Consts {
     public final static int NIKKU = 2900;
     public final static int GOPPA = 5800;
     public final static int SABUROKU = 3600;
-    public final static int HASSEN = 8000;
+    public final static int NANASENHYAKU = 7100;
+    public final static int HASSE = 8000;
     public final static int ITIMANNISE = 12000;
     public final static int ITIMANROKUSE = 16000;
     public final static int NIMANYONSE = 24000;
     public final static int SANMANNNISE = 32000;
+    public final static int ROKUMANYONSE = 64000;
 
 
     /** 親 */
@@ -66,10 +70,13 @@ public class Consts {
     public final static int KUNROKU = 9600;
     public final static int SANYON = 3400;
     public final static int ROPPA = 6800;
+    public final static int YONYON = 4400;
+    public final static int HATINANA = 8700;
     public final static int GOSAN = 5300;
     public final static int PINMARUROKU = 10600;
     public final static int ITIMANHASSE = 18000;
     public final static int SANMANROKUSE = 36000;
     public final static int YONMANHASSE = 48000;
+    public final static int KYUMANROKUSE = 96000;
 
 }

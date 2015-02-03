@@ -2,4 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="eval.wit.ai.calcmahjong.activities.ScoreActivity">
+    <item
+        android:id="@+id/game_set"
+        android:title="@string/game_set"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

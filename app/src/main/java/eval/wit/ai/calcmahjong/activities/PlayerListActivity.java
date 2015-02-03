@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -25,9 +24,9 @@ import eval.wit.ai.calcmahjong.models.entities.Player;
 
 public class PlayerListActivity extends ActionBarActivity {
     private ListView playerList;
-    private Player player;
+//    private Player player;
 
-    List<Player> list = new ArrayList<>();
+    List<Player> players = new ArrayList<>();
     CustomCheckAdapter checkAdapter;
 
     @Override
@@ -43,10 +42,10 @@ public class PlayerListActivity extends ActionBarActivity {
         Player p4 = new Player(4, "D君", "やっはろ～");
 
 
-        list.add(p);
-        list.add(p2);
-        list.add(p3);
-        list.add(p4);
+        players.add(p);
+        players.add(p2);
+        players.add(p3);
+        players.add(p4);
         checkAdapter = new CustomCheckAdapter();
 
         playerList = (ListView) findViewById(R.id.player_list);
@@ -98,12 +97,12 @@ public class PlayerListActivity extends ActionBarActivity {
 
         @Override
         public int getCount() {
-            return list.size();
+            return players.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return list.get(position);
+            return players.get(position);
         }
 
         @Override

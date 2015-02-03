@@ -5,6 +5,11 @@ package eval.wit.ai.calcmahjong.resources;
  */
 public class Consts {
     public final static int REQUEST_CODE = 200;
+    public final static int RYUKYOKU_CODE = 300;
+
+    public final static int TENPAI_ONE = 1;
+    public final static int TENPAI_TWO = 2;
+    public final static int TENPAI_THREE = 3;
 
     /** 飜数 */
     public final static String I_HAN = "1翻";
@@ -32,12 +37,16 @@ public class Consts {
     public final static String HYAKUZYU_FU = "110符";
 
     /** 点数 */
+    public final static int SCORE_25000 = 25000;
+
     /** 子 */
     public final static int SANBYAKU = 300;
     public final static int YONHYAKU = 400;
     public final static int GOHYAKU = 500;
+    public final static int ROPPYAKU = 600;
     public final static int NANAHYAKU = 700;
     public final static int HAPPYAKU = 800;
+    public final static int KYUHYAKU = 900;
     public final static int SEN = 1000;
     public final static int NISEN = 2000;
     public final static int ZANKU = 3900;
@@ -58,7 +67,7 @@ public class Consts {
     public final static int ITIMANNISE = 12000;
     public final static int ITIMANROKUSE = 16000;
     public final static int NIMANYONSE = 24000;
-    public final static int SANMANNNISE = 32000;
+    public final static int SANMANNISE = 32000;
     public final static int ROKUMANYONSE = 64000;
 
 
@@ -79,4 +88,9 @@ public class Consts {
     public final static int YONMANHASSE = 48000;
     public final static int KYUMANROKUSE = 96000;
 
+    public final static int SENNIHYAKU = 1200;
+    public final static int SENHAPPYAKU = 1800;
+    public final static int SANZE = 3000;
+    public final static int YONSE = 4000;
+    public final static int ROKUSE = 6000;
 }

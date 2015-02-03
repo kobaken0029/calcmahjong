@@ -1,5 +1,6 @@
 package eval.wit.ai.calcmahjong.activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -27,14 +28,15 @@ public class MahjongScoringActivity extends ActionBarActivity {
     private Spinner loserSpinner;
     private Spinner numberOfHanSpinner;
     private Spinner numberOfFuSpinner;
-    private CheckBox isParentCheckBox;
+    private Spinner parentSpinner;
     private EditText honbaTxt;
     private Button calcBtn;
 
     private ArrayList<Player> players;
+    private Player parent;
     private Player winner;
     private Player loser;
-    private int point;
+    private int[] point;
 
 
     @Override
@@ -46,7 +48,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
         loserSpinner = (Spinner) findViewById(R.id.loserSpinner);
         numberOfHanSpinner = (Spinner) findViewById(R.id.hanSpinner);
         numberOfFuSpinner = (Spinner) findViewById(R.id.fuSpinner);
-        isParentCheckBox = (CheckBox) findViewById(R.id.isParent);
+        parentSpinner = (Spinner) findViewById(R.id.parentSpinner);
         honbaTxt = (EditText) findViewById(R.id.honba);
 
         // スピナーに値をセット。
@@ -75,6 +77,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
             loserAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         }
         winnerSpinner.setAdapter(winnerAdapter);
+        parentSpinner.setAdapter(winnerAdapter);
 
         // 他家を加えセット
         loserAdapter.add("他家(ツモアガリ)");
@@ -85,6 +88,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
 
         // 符数セット
         numberOfFuSpinner.setAdapter(ConstsManager.getFuAdapter(this));
+        numberOfFuSpinner.setSelection(2);
     }
 
     /**
@@ -93,7 +97,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
     View.OnClickListener calcListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // 和了者、放銃者をセット
+            // 和了者、放銃者、親をセット
             for (Player p : players) {
                 if (p.getName().equals(winnerSpinner.getSelectedItem().toString())) {
                     winner = p;
@@ -102,8 +106,13 @@ public class MahjongScoringActivity extends ActionBarActivity {
                 if (p.getName().equals(loserSpinner.getSelectedItem().toString())) {
                     loser = p;
                 }
+
+                if (p.getName().equals(parentSpinner.getSelectedItem().toString())) {
+                    parent = p;
+                }
             }
 
+            // 自摸和了の場合
             if (loserSpinner.getSelectedItem().toString().equals("他家(ツモアガリ)")) {
                 loser = null;
             }
@@ -120,6 +129,13 @@ public class MahjongScoringActivity extends ActionBarActivity {
                 return;
             }
 
+            // 20符1翻の場合
+            if (numberOfFuSpinner.getSelectedItem().toString().equals(Consts.NIZYU_FU)
+                    && numberOfHanSpinner.getSelectedItem().toString().equals(Consts.I_HAN)) {
+                UiUtil.showToast(MahjongScoringActivity.this, "20符1翻は存在しません。");
+                return;
+            }
+
             // 25符1翻の場合
             if (numberOfFuSpinner.getSelectedItem().toString().equals(Consts.NIZYUGO_FU)
                     && numberOfHanSpinner.getSelectedItem().toString().equals(Consts.I_HAN)) {
@@ -133,10 +149,13 @@ public class MahjongScoringActivity extends ActionBarActivity {
                 honba = Integer.parseInt(honbaTxt.getText().toString());
             }
 
+            // 和了者が親かどうかの判定
+            boolean isParent = parent.getId() == winner.getId();
+
             // 得点を取得
             point = ConstsManager.calcPoint(numberOfFuSpinner.getSelectedItem().toString(),
                                             numberOfHanSpinner.getSelectedItem().toString(),
-                                            isParentCheckBox.isChecked(),
+                                            isParent,
                                             loser == null,
                                             honba);
 
@@ -145,7 +164,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
                     + "飜数" + numberOfHanSpinner.getSelectedItem().toString() + "\n"
                     + "符数" + numberOfFuSpinner.getSelectedItem().toString() + "\n"
                     + honba + "本場" + "\n"
-                    + "得点" + point;
+                    + "得点" + point[0];
             UiUtil.showDialog(MahjongScoringActivity.this, msg, listener);
         }
     };
@@ -159,6 +178,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
             Intent intent = new Intent();
             intent.putExtra("point", point);
             intent.putExtra("winner", winner);
+            intent.putExtra("parent", parent);
 
             if (loser != null) {
                 intent.putExtra("loser", loser);
@@ -186,7 +206,8 @@ public class MahjongScoringActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.ryukyoku) {
+            new RyukyokuDialog().showDialog(MahjongScoringActivity.this, this);
             return true;
         }
 

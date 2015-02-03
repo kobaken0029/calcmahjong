@@ -3,6 +3,7 @@ package eval.wit.ai.calcmahjong.models.clients;
 import android.app.Application;
 import android.content.Context;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,16 +14,16 @@ import eval.wit.ai.calcmahjong.models.entities.Player;
  * Created by koba on 2015/01/25.
  */
 public class AppController extends Application {
-    private Context mContext;
     private ArrayList<Player> players;
 
     private int gameCnt;
+    private List<HashMap<Integer, Integer>> playersPointList;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = getApplicationContext();
-        gameCnt = 0;
+        gameCnt = 1;
+        playersPointList = new ArrayList<>();
 
         // mock
         Player p1 = new Player(1, "A君", "よろしく");
@@ -43,7 +44,7 @@ public class AppController extends Application {
      * @return 半荘数
      */
     public int getGameCnt() {
-        return ++gameCnt;
+        return gameCnt;
     }
 
     /**
@@ -67,6 +68,30 @@ public class AppController extends Application {
      * @param players プレイヤー群
      */
     public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
+        this.players = new ArrayList<>(players);
+    }
+
+    /**
+     * プレイヤー群の夫々の得点群を取得します。
+     * @return プレイヤー群の夫々の得点群
+     */
+    public List<HashMap<Integer, Integer>> getPlayersPointList() {
+        return playersPointList;
+    }
+
+    /**
+     * プレイヤー群の夫々の得点群をセットします。
+     * @param playersPointList プレイヤー群の夫々の得点群
+     */
+    public void setPlayersPointList(List<HashMap<Integer, Integer>> playersPointList) {
+        this.playersPointList = new ArrayList<>(playersPointList);
+    }
+
+    /**
+     * プレイヤー群の夫々の得点をリストに追加します。
+     * @param playersPoint プレイヤー群の夫々の得点
+     */
+    public void addPlayersPoint(HashMap<Integer, Integer> playersPoint) {
+        this.playersPointList.add(playersPoint);
     }
 }

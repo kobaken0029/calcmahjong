@@ -13,14 +13,13 @@ public class PlayerRecordActivity extends ActionBarActivity {
     private TextView nameTxt;
     private TextView messageTxt;
 
-    private Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_record);
 
-        player = (Player) getIntent().getSerializableExtra("player");
+        Player player = (Player) getIntent().getSerializableExtra("player");
 
         nameTxt = (TextView) findViewById(R.id.name);
         nameTxt.setText(player.getName());

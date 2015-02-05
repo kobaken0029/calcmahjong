@@ -38,11 +38,13 @@ public class MahjongScoringActivity extends ActionBarActivity {
     private Player loser;
     private int[] point;
 
+    private AppController appController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mahjong_scoring);
+        appController = (AppController) getApplication();
 
         winnerSpinner = (Spinner) findViewById(R.id.winnerSpinner);
         loserSpinner = (Spinner) findViewById(R.id.loserSpinner);
@@ -66,7 +68,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
         ArrayAdapter<String> loserAdapter = new ArrayAdapter<>(this, R.layout.spinner_item);
 
         // 参加者を取得
-        players = ((AppController) getApplication()).getPlayers();
+        players = appController.getPlayers();
 
         // 参加中のプレイヤーをセット
         for (Player p : players) {

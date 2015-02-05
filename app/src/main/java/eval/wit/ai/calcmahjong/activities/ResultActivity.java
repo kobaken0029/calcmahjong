@@ -209,6 +209,7 @@ public class ResultActivity extends ActionBarActivity {
                 dialog.cancel();
                 appController.setGameCnt(1);
                 appController.setPlayersPointList(new ArrayList<HashMap<Integer, Integer>>());
+                appController.setNumOfDepositBar(0);
                 finish();
             }
         });

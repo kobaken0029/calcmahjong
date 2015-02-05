@@ -7,6 +7,8 @@
     <!-- 点数表示 -->
     <string name="title_activity_score">点数表示</string>
     <string name="half_game_set_message">半荘を終了してもよいですか?</string>
+    <string name="call_message">立直しますか?</string>
+    <string name="already_call_message">既に立直済みです</string>
 
     <!-- 点数計算 -->
     <string name="title_activity_mahjong_scoring">点数計算</string>

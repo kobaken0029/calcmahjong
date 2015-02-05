@@ -19,11 +19,14 @@ public class AppController extends Application {
     private int gameCnt;
     private List<HashMap<Integer, Integer>> playersPointList;
 
+    private int NumOfDepositBar;
+
     @Override
     public void onCreate() {
         super.onCreate();
         gameCnt = 1;
         playersPointList = new ArrayList<>();
+        NumOfDepositBar = 0;
 
         // mock
         Player p1 = new Player(1, "A君", "よろしく");
@@ -93,5 +96,21 @@ public class AppController extends Application {
      */
     public void addPlayersPoint(HashMap<Integer, Integer> playersPoint) {
         this.playersPointList.add(playersPoint);
+    }
+
+    /**
+     * 供託棒の数を取得します。
+     * @return 供託棒数
+     */
+    public int getNumOfDepositBar() {
+        return NumOfDepositBar;
+    }
+
+    /**
+     * 供託棒の数をセットします。
+     * @param numOfDepositBar 供託棒数
+     */
+    public void setNumOfDepositBar(int numOfDepositBar) {
+        NumOfDepositBar = numOfDepositBar;
     }
 }

@@ -32,6 +32,7 @@ public class ScoreActivity extends ActionBarActivity {
 
     private ArrayList<Player> players;
     private HashMap<Integer, Integer> playersPoint;
+    private HashMap<Integer, Boolean> isCallPlayers;
 
     private AppController appController;
 
@@ -51,12 +52,6 @@ public class ScoreActivity extends ActionBarActivity {
                 startActivityForResult(intent, Consts.REQUEST_CODE);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     @Override
@@ -81,6 +76,10 @@ public class ScoreActivity extends ActionBarActivity {
                     for (int p : point) {
                         getWinnerPoint += p;
                     }
+
+                    // 供託棒分の加点
+                    getWinnerPoint += appController.getNumOfDepositBar() * Consts.SEN;
+                    appController.setNumOfDepositBar(0);
 
                     boolean isTumo = loser == null;
                     ArrayList<Player> exceptingWinnerList = new ArrayList<>();
@@ -117,16 +116,19 @@ public class ScoreActivity extends ActionBarActivity {
                             }
                         }
                     }
-
-                    // 計算処理後のスコアを画面に反映
-                    setPlayersScore();
                 } else if (resultCode == Consts.RYUKYOKU_CODE) {
                     // 流局時の聴牌者人数に応じて得点を振り分け
                     calcRyukyokuPoint((ArrayList<Player>) data.getSerializableExtra("tenpai"));
-
-                    // 計算処理後のスコアを画面に反映
-                    setPlayersScore();
                 }
+
+                // 計算処理後のスコアを画面に反映
+                setPlayersScore();
+
+                // 全プレイヤーの立直状態を解除
+                isCallPlayers.put(players.get(0).getId(), Boolean.FALSE);
+                isCallPlayers.put(players.get(1).getId(), Boolean.FALSE);
+                isCallPlayers.put(players.get(2).getId(), Boolean.FALSE);
+                isCallPlayers.put(players.get(3).getId(), Boolean.FALSE);
                 break;
             default:
                 break;
@@ -139,6 +141,7 @@ public class ScoreActivity extends ActionBarActivity {
      */
     private void init() {
         playersPoint = new HashMap<>();
+        isCallPlayers = new HashMap<>();
         players = ((AppController) getApplication()).getPlayers();
         Integer firstScore = ConstsManager.getFirstScore();
 
@@ -146,6 +149,11 @@ public class ScoreActivity extends ActionBarActivity {
         playersPoint.put(players.get(1).getId(), firstScore);
         playersPoint.put(players.get(2).getId(), firstScore);
         playersPoint.put(players.get(3).getId(), firstScore);
+
+        isCallPlayers.put(players.get(0).getId(), Boolean.FALSE);
+        isCallPlayers.put(players.get(1).getId(), Boolean.FALSE);
+        isCallPlayers.put(players.get(2).getId(), Boolean.FALSE);
+        isCallPlayers.put(players.get(3).getId(), Boolean.FALSE);
 
         TextView p1Txt = (TextView) findViewById(R.id.p1);
         TextView p2Txt = (TextView) findViewById(R.id.p2);
@@ -161,6 +169,15 @@ public class ScoreActivity extends ActionBarActivity {
         p2Txt.setText(players.get(1).getName());
         p3Txt.setText(players.get(2).getName());
         p4Txt.setText(players.get(3).getName());
+
+        p1Txt.setOnClickListener(callListener);
+        p2Txt.setOnClickListener(callListener);
+        p3Txt.setOnClickListener(callListener);
+        p4Txt.setOnClickListener(callListener);
+//        p1ScoreTxt.setOnClickListener(callListener);
+//        p2ScoreTxt.setOnClickListener(callListener);
+//        p3ScoreTxt.setOnClickListener(callListener);
+//        p4ScoreTxt.setOnClickListener(callListener);
 
         setPlayersScore();
     }
@@ -212,6 +229,45 @@ public class ScoreActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * プレイヤー名を押下した際のリーチListener。
+     */
+    private View.OnClickListener callListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final String playerName = ((TextView) v).getText().toString();
+            Player buf = null;
+
+            // 立直宣言者を取得
+            for (Player p : players) {
+                if (p.getName().equals(playerName)) {
+                    buf = p;
+                }
+            }
+            final Player callPlayer = buf;
+
+            // 立直済みかどうかの判定
+            if (callPlayer != null && isCallPlayers.get(callPlayer.getId()).equals(Boolean.TRUE)) {
+                UiUtil.showToast(ScoreActivity.this, getResources().getString(R.string.already_call_message));
+                return;
+            }
+
+            UiUtil.showDialog(ScoreActivity.this, getResources().getString(R.string.call_message),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 立直宣言者の点数から1000点引く
+                            if (callPlayer != null) {
+                                playersPoint.put(callPlayer.getId(), playersPoint.get(callPlayer.getId()) - Consts.SEN);
+                                isCallPlayers.put(callPlayer.getId(), Boolean.TRUE);
+                                appController.setNumOfDepositBar(appController.getNumOfDepositBar() + 1);
+                            }
+                            setPlayersScore();
+                        }
+                    });
+        }
+    };
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode != KeyEvent.KEYCODE_BACK) {
@@ -224,6 +280,7 @@ public class ScoreActivity extends ActionBarActivity {
                             dialog.cancel();
                             appController.setGameCnt(1);
                             appController.setPlayersPointList(new ArrayList<HashMap<Integer, Integer>>());
+                            appController.setNumOfDepositBar(0);
                             finish();
                         }
                     });

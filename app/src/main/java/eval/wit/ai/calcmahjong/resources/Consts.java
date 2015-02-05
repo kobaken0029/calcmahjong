@@ -4,6 +4,10 @@ package eval.wit.ai.calcmahjong.resources;
  * Created by koba on 2015/01/26.
  */
 public class Consts {
+    /** プレイヤー数 */
+    public final static int NUM_OF_PLAYER_YONMA = 4;
+    public final static int NUM_OF_PLAYER_SANMA = 3;
+
     /** コード */
     public final static int REQUEST_CODE = 200;
     public final static int RYUKYOKU_CODE = 300;

@@ -20,6 +20,7 @@
 
     <!-- プレイヤー一覧 -->
     <string name="title_activity_player_list">プレイヤー一覧</string>
+    <string name="number_of_player_error">4人以上選択してください</string>
 
     <!-- プレイヤー登録 -->
     <string name="title_activity_player_registration">プレイヤー登録</string>

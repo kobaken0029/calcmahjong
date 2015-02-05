@@ -1,9 +1,11 @@
 package eval.wit.ai.calcmahjong.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,22 +19,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import eval.wit.ai.calcmahjong.R;
+import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.entities.Player;
+import eval.wit.ai.calcmahjong.resources.ConstsManager;
+import eval.wit.ai.calcmahjong.utilities.UiUtil;
 
 public class PlayerListActivity extends ActionBarActivity {
     private ListView playerList;
 //    private Player player;
 
-    List<Player> players = new ArrayList<>();
-    CustomCheckAdapter checkAdapter;
+    private List<Player> players = new ArrayList<>();
+    private CustomCheckAdapter checkAdapter;
+
+    private AppController appController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_list);
+        appController = (AppController) getApplication();
 
 
         // mock
@@ -40,16 +49,22 @@ public class PlayerListActivity extends ActionBarActivity {
         Player p2 = new Player(2, "B君", "よろしく");
         Player p3 = new Player(3, "C君", "");
         Player p4 = new Player(4, "D君", "やっはろ～");
-
+        Player p5 = new Player(4, "E君", "やっはろ～");
+        Player p6 = new Player(4, "F君", "やっはろ～");
+        Player p7 = new Player(4, "G君", "やっはろ～");
 
         players.add(p);
         players.add(p2);
         players.add(p3);
         players.add(p4);
+        players.add(p5);
+        players.add(p6);
+        players.add(p7);
+//        players = appController.getPlayers();
         checkAdapter = new CustomCheckAdapter();
 
         playerList = (ListView) findViewById(R.id.player_list);
-        playerList.setOnItemClickListener(onItemClickListener);
+//        playerList.setOnItemClickListener(onItemClickListener);
         playerList.setAdapter(checkAdapter);
     }
 
@@ -65,6 +80,28 @@ public class PlayerListActivity extends ActionBarActivity {
             startActivity(intent);
         }
     };
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode != KeyEvent.KEYCODE_BACK) {
+            return super.onKeyDown(keyCode, event);
+        } else {
+            ArrayList<Player> playToPlayers = new ArrayList<>();
+            for (Player p : players) {
+                if (p.isPlay()) {
+                    playToPlayers.add(p);
+                }
+            }
+
+            if (playToPlayers.size() < ConstsManager.getNumOfPlayer()) {
+                UiUtil.showDialog(PlayerListActivity.this, getResources().getString(R.string.number_of_player_error), null);
+            } else {
+                appController.setPlayers(playToPlayers);
+                finish();
+            }
+            return false;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,6 +131,7 @@ public class PlayerListActivity extends ActionBarActivity {
      * 設定リストのAdapterです。
      */
     private class CustomCheckAdapter extends BaseAdapter {
+        int cnt = 0;
 
         @Override
         public int getCount() {
@@ -129,16 +167,25 @@ public class PlayerListActivity extends ActionBarActivity {
 
             final Player p = (Player) getItem(position);
             if (p != null) {
+                if (cnt < 4) {
+                    p.setPlay(true);
+                    cnt++;
+                }
                 holder.textView.setText(p.getName());
-                holder.checkBox
-                        .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton buttonView,
-                                                         boolean isChecked) {
-                                p.setPlay(isChecked);
-                            }
-                        });
-
+                holder.textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(PlayerListActivity.this, PlayerRecordActivity.class);
+                        intent.putExtra("player", p);
+                        startActivity(intent);
+                    }
+                });
+                holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        p.setPlay(!p.isPlay());
+                    }
+                });
                 holder.checkBox.setChecked(p.isPlay());
             }
 
@@ -153,48 +200,4 @@ public class PlayerListActivity extends ActionBarActivity {
             CheckBox checkBox;
         }
     }
-
-//    /**
-//     * カスタムクラス。
-//     */
-//    private class CustomCheckData {
-//        private String text;
-//        private boolean checkFlag;
-//
-//        /**
-//         * コンストラクタ。
-//         *
-//         * @param text テキスト
-//         * @param checkFlag チェックボックス真偽
-//         */
-//        public CustomCheckData(String text, boolean checkFlag) {
-//            this.setText(text);
-//            this.setCheckFlag(checkFlag);
-//        }
-//
-//        /**
-//         * リストのテキストをセットします。
-//         *
-//         * @param text テキスト
-//         */
-//        public void setText(String text) {
-//            this.text = text;
-//        }
-//
-//        /**
-//         * チェックボックスの真偽を取得します。
-//         *
-//         * @return 真偽
-//         */
-//        public boolean isCheckFlag() {
-//            return checkFlag;
-//        }
-//
-//        /**
-//         * チェックボックスの真偽をセットします。
-//         */
-//        public void setCheckFlag(boolean checkFlag) {
-//            this.checkFlag = checkFlag;
-//        }
-//    }
 }

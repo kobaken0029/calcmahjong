@@ -10,6 +10,10 @@ import eval.wit.ai.calcmahjong.R;
  */
 public class ConstsManager {
 
+    public static int getNumOfPlayer() {
+        return Consts.NUM_OF_PLAYER_YONMA;
+    }
+
     /**
      * 飜数のアダプターを取得。
      *

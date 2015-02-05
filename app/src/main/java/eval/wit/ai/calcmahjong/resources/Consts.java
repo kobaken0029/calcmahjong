@@ -14,7 +14,8 @@ public class Consts {
     public final static int TENPAI_THREE = 3;
 
     /** 音声URL */
-    public final static String CALL_VOICE_URL = "http://www14.big.or.jp/~amiami/happy/download/voice/208_janken/ri-chi_01.wav";
+    public final static String CALL_VOICE_1_URL = "http://www14.big.or.jp/~amiami/happy/download/voice/208_janken/ri-chi_01.wav";
+    public final static String CALL_VOICE_2_URL = "http://majyo3com.ddo.jp/List.files/WAV/Ree00.wav";
     public final static String RYUKYOKU_VOICE_URL = "http://majyo3com.ddo.jp/List.files/WAV/Ryuukyoku00.wav";
     public final static String TUMO_VOICE_URL = "http://www14.big.or.jp/~amiami/happy/download/voice/208_janken/tsumo_01.wav";
     public final static String RON_VOICE_URL = "http://www14.big.or.jp/~amiami/happy/download/voice/208_janken/ron_01.wav";

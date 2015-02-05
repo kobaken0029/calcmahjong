@@ -2,17 +2,15 @@ package eval.wit.ai.calcmahjong.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.test.UiThreadTest;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +20,7 @@ import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.entities.Player;
 import eval.wit.ai.calcmahjong.resources.Consts;
 import eval.wit.ai.calcmahjong.resources.ConstsManager;
+import eval.wit.ai.calcmahjong.utilities.AudioUtil;
 import eval.wit.ai.calcmahjong.utilities.UiUtil;
 
 public class ScoreActivity extends ActionBarActivity {
@@ -35,6 +34,8 @@ public class ScoreActivity extends ActionBarActivity {
     private HashMap<Integer, Boolean> isCallPlayers;
 
     private AppController appController;
+
+    private MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,30 @@ public class ScoreActivity extends ActionBarActivity {
                 startActivityForResult(intent, Consts.REQUEST_CODE);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mp = new MediaPlayer();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mp != null) {
+            mp.release();
+            mp = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mp != null) {
+            mp.release();
+            mp = null;
+        }
     }
 
     @Override
@@ -194,6 +219,7 @@ public class ScoreActivity extends ActionBarActivity {
 
     /**
      * 流局時のスコアを計算して各プレイヤーのポイントに反映させる。
+     *
      * @param tenpaiPlayers 聴牌者群
      */
     private void calcRyukyokuPoint(ArrayList<Player> tenpaiPlayers) {
@@ -201,36 +227,38 @@ public class ScoreActivity extends ActionBarActivity {
         int tenpaiGetPoint = 0;
         int notenLosePoint = 0;
 
-        switch (tenpaiPlayers.size()) {
-            case Consts.TENPAI_ONE:
-                tenpaiGetPoint = Consts.SANZE;
-                notenLosePoint = Consts.SEN;
-                break;
-            case Consts.TENPAI_TWO:
-                tenpaiGetPoint = notenLosePoint = Consts.ITIGO;
-                break;
-            case Consts.TENPAI_THREE:
-                tenpaiGetPoint = Consts.SEN;
-                notenLosePoint = Consts.SANZE;
-                break;
-            default:
-                break;
-        }
+        if (tenpaiPlayers.size() != 0) {
+            switch (tenpaiPlayers.size()) {
+                case Consts.TENPAI_ONE:
+                    tenpaiGetPoint = Consts.SANZE;
+                    notenLosePoint = Consts.SEN;
+                    break;
+                case Consts.TENPAI_TWO:
+                    tenpaiGetPoint = notenLosePoint = Consts.ITIGO;
+                    break;
+                case Consts.TENPAI_THREE:
+                    tenpaiGetPoint = Consts.SEN;
+                    notenLosePoint = Consts.SANZE;
+                    break;
+                default:
+                    break;
+            }
 
-        for (Player p : players) {
-            if (p.getId() == tenpaiPlayers.get(i).getId()) {
-                playersPoint.put(p.getId(), playersPoint.get(p.getId()) + tenpaiGetPoint);
-                if (i < (tenpaiPlayers.size() - 1)) {
-                    i++;
+            for (Player p : players) {
+                if (p.getId() == tenpaiPlayers.get(i).getId()) {
+                    playersPoint.put(p.getId(), playersPoint.get(p.getId()) + tenpaiGetPoint);
+                    if (i < (tenpaiPlayers.size() - 1)) {
+                        i++;
+                    }
+                } else {
+                    playersPoint.put(p.getId(), playersPoint.get(p.getId()) - notenLosePoint);
                 }
-            } else {
-                playersPoint.put(p.getId(), playersPoint.get(p.getId()) - notenLosePoint);
             }
         }
     }
 
     /**
-     * プレイヤー名を押下した際のリーチListener。
+     * プレイヤー名を押下した際のListener。
      */
     private View.OnClickListener callListener = new View.OnClickListener() {
         @Override
@@ -256,17 +284,38 @@ public class ScoreActivity extends ActionBarActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // 立直宣言者の点数から1000点引く
-                            if (callPlayer != null) {
-                                playersPoint.put(callPlayer.getId(), playersPoint.get(callPlayer.getId()) - Consts.SEN);
-                                isCallPlayers.put(callPlayer.getId(), Boolean.TRUE);
-                                appController.setNumOfDepositBar(appController.getNumOfDepositBar() + 1);
-                            }
-                            setPlayersScore();
+                            AudioUtil.play(mp, getApplicationContext(), Consts.CALL_VOICE_URL,
+                                    callVoiceListener(callPlayer));
                         }
                     });
         }
     };
+
+    /**
+     * 立直ボイスが流れる際のリスナー。
+     *
+     * @param callPlayer 立直者
+     * @return リスナー
+     */
+    private MediaPlayer.OnPreparedListener callVoiceListener(final Player callPlayer) {
+        return new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                if (mp.isPlaying()) {
+                    mp.stop();
+                }
+                mp.start();
+
+                // 立直宣言者の点数から1000点引く
+                if (callPlayer != null) {
+                    playersPoint.put(callPlayer.getId(), playersPoint.get(callPlayer.getId()) - Consts.SEN);
+                    isCallPlayers.put(callPlayer.getId(), Boolean.TRUE);
+                    appController.setNumOfDepositBar(appController.getNumOfDepositBar() + 1);
+                }
+                setPlayersScore();
+            }
+        };
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="eval.wit.ai.calcmahjong" >
 
+    <!-- HTTP通信 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".models.clients.AppController"
         android:allowBackup="true"

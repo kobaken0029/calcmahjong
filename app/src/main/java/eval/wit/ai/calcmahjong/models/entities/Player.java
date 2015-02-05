@@ -12,6 +12,9 @@ public class Player implements Serializable {
     private String message;
     private boolean isPlay;
 
+    public Player() {
+    }
+
     public Player(int id, String name, String message) {
         this.id = id;
         this.name = name;

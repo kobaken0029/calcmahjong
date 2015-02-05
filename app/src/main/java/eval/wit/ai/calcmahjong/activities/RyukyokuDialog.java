@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,14 @@ import eval.wit.ai.calcmahjong.R;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.entities.Player;
 import eval.wit.ai.calcmahjong.resources.Consts;
+import eval.wit.ai.calcmahjong.utilities.AudioUtil;
 
 public class RyukyokuDialog {
     private CheckBox[] checkBoxes = new CheckBox[4];
     private View layout;
     private ArrayList<Player> players;
+
+    private MediaPlayer mp;
 
     /**
      * ダイアログを表示します。
@@ -31,6 +36,8 @@ public class RyukyokuDialog {
      * @param activity アクティビティ
      */
     public void showDialog(final Context context, final Activity activity) {
+        mp = new MediaPlayer();
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         layout = inflater.inflate(R.layout.activity_ryukyoku_dialog,
@@ -47,13 +54,21 @@ public class RyukyokuDialog {
                 .setView(layout)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, int which) {
                         Intent intent = new Intent();
                         intent.putExtra("tenpai", getTenpaiPlayers(players));
                         activity.setResult(Consts.RYUKYOKU_CODE, intent);
 
-                        dialog.cancel();
-                        activity.finish();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mp.release();
+                                mp = null;
+                                dialog.cancel();
+                                activity.finish();
+                            }
+                        }, Consts.DELAY_TIME);
+                        AudioUtil.play(mp, context, Consts.RYUKYOKU_VOICE_URL, null);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

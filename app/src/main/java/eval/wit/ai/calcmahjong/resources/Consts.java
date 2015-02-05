@@ -4,12 +4,23 @@ package eval.wit.ai.calcmahjong.resources;
  * Created by koba on 2015/01/26.
  */
 public class Consts {
+    /** コード */
     public final static int REQUEST_CODE = 200;
     public final static int RYUKYOKU_CODE = 300;
 
+    /** 聴牌情報 */
     public final static int TENPAI_ONE = 1;
     public final static int TENPAI_TWO = 2;
     public final static int TENPAI_THREE = 3;
+
+    /** 音声URL */
+    public final static String CALL_VOICE_URL = "http://www14.big.or.jp/~amiami/happy/download/voice/208_janken/ri-chi_01.wav";
+    public final static String RYUKYOKU_VOICE_URL = "http://majyo3com.ddo.jp/List.files/WAV/Ryuukyoku00.wav";
+    public final static String TUMO_VOICE_URL = "http://www14.big.or.jp/~amiami/happy/download/voice/208_janken/tsumo_01.wav";
+    public final static String RON_VOICE_URL = "http://www14.big.or.jp/~amiami/happy/download/voice/208_janken/ron_01.wav";
+
+    /** 遅延時間 */
+    public final static int DELAY_TIME = 3000;
 
     /** 飜数 */
     public final static String I_HAN = "1翻";

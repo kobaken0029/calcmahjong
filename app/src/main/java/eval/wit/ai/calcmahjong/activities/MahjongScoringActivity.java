@@ -3,6 +3,8 @@ package eval.wit.ai.calcmahjong.activities;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +23,7 @@ import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.entities.Player;
 import eval.wit.ai.calcmahjong.resources.Consts;
 import eval.wit.ai.calcmahjong.resources.ConstsManager;
+import eval.wit.ai.calcmahjong.utilities.AudioUtil;
 import eval.wit.ai.calcmahjong.utilities.UiUtil;
 
 public class MahjongScoringActivity extends ActionBarActivity {
@@ -40,11 +43,14 @@ public class MahjongScoringActivity extends ActionBarActivity {
 
     private AppController appController;
 
+    private MediaPlayer mp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mahjong_scoring);
         appController = (AppController) getApplication();
+        mp = new MediaPlayer();
 
         winnerSpinner = (Spinner) findViewById(R.id.winnerSpinner);
         loserSpinner = (Spinner) findViewById(R.id.loserSpinner);
@@ -58,6 +64,24 @@ public class MahjongScoringActivity extends ActionBarActivity {
 
         calcBtn = (Button) findViewById(R.id.calc);
         calcBtn.setOnClickListener(calcListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mp != null) {
+            mp.release();
+            mp = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mp != null) {
+            mp.release();
+            mp = null;
+        }
     }
 
     /**
@@ -176,7 +200,8 @@ public class MahjongScoringActivity extends ActionBarActivity {
      */
     DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
         @Override
-        public void onClick(DialogInterface dialog, int which) {
+        public void onClick(final DialogInterface dialog, int which) {
+            String uri = Consts.TUMO_VOICE_URL;
             Intent intent = new Intent();
             intent.putExtra("point", point);
             intent.putExtra("winner", winner);
@@ -184,12 +209,21 @@ public class MahjongScoringActivity extends ActionBarActivity {
 
             if (loser != null) {
                 intent.putExtra("loser", loser);
+                uri = Consts.RON_VOICE_URL;
             }
 
             setResult(RESULT_OK, intent);
 
-            dialog.cancel();
-            finish();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mp.release();
+                    mp = null;
+                    dialog.cancel();
+                    finish();
+                }
+            }, Consts.DELAY_TIME);
+            AudioUtil.play(mp, getApplicationContext(), uri, null);
         }
     };
 

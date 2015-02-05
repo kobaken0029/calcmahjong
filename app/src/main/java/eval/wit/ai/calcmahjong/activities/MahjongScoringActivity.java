@@ -62,8 +62,8 @@ public class MahjongScoringActivity extends ActionBarActivity {
      * スピナーに値をセット。
      */
     public void setSpinner() {
-        ArrayAdapter<String> winnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        ArrayAdapter<String> loserAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> winnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item);
+        ArrayAdapter<String> loserAdapter = new ArrayAdapter<>(this, R.layout.spinner_item);
 
         // 参加者を取得
         players = ((AppController) getApplication()).getPlayers();

@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="各項目を入力してください。"
-        android:textColor="#FFC30062"
+        android:textColor="#FFFFFF00"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:layout_alignParentTop="true"
@@ -46,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="和了者"
+                android:textColor="#FFFFFFFF"
                 android:id="@+id/winner"
                 android:layout_marginRight="18dp" />
 
@@ -67,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="放銃者"
+                android:textColor="#FFFFFFFF"
                 android:id="@+id/loser"
                 android:layout_marginRight="18dp" />
 
@@ -86,8 +88,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="飜数は？"
-                android:id="@+id/han" />
+                android:text="飜数"
+                android:textColor="#FFFFFFFF"
+                android:id="@+id/han"
+                android:layout_marginRight="36dp" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -105,8 +109,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="符数は？"
-                android:id="@+id/fuTxt" />
+                android:text="符数"
+                android:textColor="#FFFFFFFF"
+                android:id="@+id/fuTxt"
+                android:layout_marginRight="36dp" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -125,6 +131,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="親"
+                android:textColor="#FFFFFFFF"
                 android:id="@+id/isParentTxt"
                 android:layout_marginRight="50dp" />
 
@@ -155,6 +162,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="本場"
+                android:textColor="#FFFFFFFF"
                 android:id="@+id/honbaTxt" />
         </LinearLayout>
 

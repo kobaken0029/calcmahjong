@@ -31,6 +31,7 @@ public class ResultActivity extends ActionBarActivity {
     private TextView player2ScoreTotalTxt;
     private TextView player3ScoreTotalTxt;
     private TextView player4ScoreTotalTxt;
+    private Button rePlayBtn;
 
     private List<Player> players;
     private List<HashMap<Integer, Integer>> playersPointList;
@@ -68,11 +69,16 @@ public class ResultActivity extends ActionBarActivity {
         // 半荘ごとのスコアを表に反映
         setScoreView();
 
-        Button rePlayBtn = (Button) findViewById(R.id.rePlay);
+        rePlayBtn = (Button) findViewById(R.id.rePlay);
         rePlayBtn.setOnClickListener(rePlayListener);
 
         Button finishBtn = (Button) findViewById(R.id.finish);
         finishBtn.setOnClickListener(finishListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         // 4半荘目の場合、再度半荘を出来ないようにする
         if (gameCnt == 4) {
@@ -155,7 +161,7 @@ public class ResultActivity extends ActionBarActivity {
 
         // トップを探す
         double buf = playersPoint.get(players.get(0).getId());
-        int topId = 1;
+        int topId = players.get(0).getId();
         for (Player p : players) {
             if (buf < playersPoint.get(p.getId())) {
                 buf = playersPoint.get(p.getId());

@@ -29,7 +29,7 @@
     <string name="title_activity_player_registration">プレイヤー登録</string>
     <string name="name_duplication_message">その名前は既に使用されています</string>
     <string name="name_nothing_message">名前を入力してください</string>
-    <string name="number_of_name_over_message">名前を入力してください</string>
+    <string name="number_of_name_over_message">名前は4文字以内で入力してください</string>
 
     <!-- 試合結果 -->
     <string name="title_activity_result">結果発表</string>

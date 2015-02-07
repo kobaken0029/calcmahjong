@@ -29,6 +29,9 @@ public class MenuActivity extends ActionBarActivity {
                     UiUtil.showDialog(MenuActivity.this, getResources().getString(R.string.number_of_player_error), null);
                     return;
                 }
+
+
+
                 startActivity(new Intent(MenuActivity.this, ScoreActivity.class));
             }
         });

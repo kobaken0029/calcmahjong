@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseErrorHandler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -49,38 +51,22 @@ public class PlayerListActivity extends ActionBarActivity {
         dbAdapter = appController.getDbAdapter();
 
 
-        dbAdapter.open();
-        dbAdapter.daleteAllPlayers();
-        dbAdapter.savePlayer("A君", "よろしく");
-        dbAdapter.savePlayer("B君", "よろしく");
-        dbAdapter.savePlayer("C君", "よろしく");
-        dbAdapter.savePlayer("D君", "よろしく");
+//        dbAdapter.open();
+//        dbAdapter.daleteAllPlayers();
+//        dbAdapter.savePlayer("A君", "よろしく");
+//        dbAdapter.savePlayer("B君", "よろしく");
+//        dbAdapter.savePlayer("C君", "よろしく");
+//        dbAdapter.savePlayer("D君", "よろしく");
 //        dbAdapter.savePlayer("E君", "よろしく");
 //        dbAdapter.savePlayer("F君", "よろしく");
 //        dbAdapter.savePlayer("G君", "よろしく");
 //        dbAdapter.savePlayer("H君", "よろしく");
-        dbAdapter.close();
+//        dbAdapter.close();
 
-        // mock
-//        Player p = new Player(1, "A君", "よろしく");
-//        Player p2 = new Player(2, "B君", "よろしく");
-//        Player p3 = new Player(3, "C君", "");
-//        Player p4 = new Player(4, "D君", "やっはろ～");
-//        Player p5 = new Player(4, "E君", "やっはろ～");
-//        Player p6 = new Player(4, "F君", "やっはろ～");
-//        Player p7 = new Player(4, "G君", "やっはろ～");
-
-//        players.add(p);
-//        players.add(p2);
-//        players.add(p3);
-//        players.add(p4);
-//        players.add(p5);
-//        players.add(p6);
-//        players.add(p7);
         checkAdapter = new CustomCheckAdapter();
 
         playerList = (ListView) findViewById(R.id.player_list);
-//        playerList.setOnItemClickListener(onItemClickListener);
+        playerList.setOnItemClickListener(onItemClickListener);
         playerList.setAdapter(checkAdapter);
         playerList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
@@ -112,7 +98,8 @@ public class PlayerListActivity extends ActionBarActivity {
                 Player player = new Player(
                         c.getInt(c.getColumnIndex(DatabaseAdapter.COL_ID)),
                         c.getString(c.getColumnIndex(DatabaseAdapter.COL_NAME)),
-                        c.getString(c.getColumnIndex(DatabaseAdapter.COL_MESSAGE)));
+                        c.getString(c.getColumnIndex(DatabaseAdapter.COL_MESSAGE)),
+                        c.getString(c.getColumnIndex(DatabaseAdapter.COL_IS_PLAY)).equals("1"));
                 players.add(player);
             } while (c.moveToNext());
         }
@@ -150,6 +137,13 @@ public class PlayerListActivity extends ActionBarActivity {
             if (playToPlayers.size() < ConstsManager.getNumOfPlayer()) {
                 UiUtil.showDialog(PlayerListActivity.this, getResources().getString(R.string.number_of_player_error), null);
             } else {
+                dbAdapter.open();
+                for (Player p : players) {
+                    dbAdapter.updatePlayer(p);
+                    Log.d("PLAYER", String.valueOf(p.isPlay()));
+                }
+                dbAdapter.close();
+
                 appController.setPlayers(playToPlayers);
                 finish();
             }
@@ -248,14 +242,6 @@ public class PlayerListActivity extends ActionBarActivity {
             final Player p = (Player) getItem(position);
             if (p != null) {
                 holder.textView.setText(p.getName());
-                holder.textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(PlayerListActivity.this, PlayerRecordActivity.class);
-                        intent.putExtra("player", p);
-                        startActivity(intent);
-                    }
-                });
                 holder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

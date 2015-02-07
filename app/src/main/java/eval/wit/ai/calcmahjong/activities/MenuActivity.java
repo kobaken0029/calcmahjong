@@ -1,5 +1,6 @@
 package eval.wit.ai.calcmahjong.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 
 import eval.wit.ai.calcmahjong.R;
+import eval.wit.ai.calcmahjong.models.clients.AppController;
+import eval.wit.ai.calcmahjong.utilities.UiUtil;
 
 
 public class MenuActivity extends ActionBarActivity {
@@ -22,6 +25,10 @@ public class MenuActivity extends ActionBarActivity {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (((AppController) getApplication()).getPlayers().size() < 4) {
+                    UiUtil.showDialog(MenuActivity.this, getResources().getString(R.string.number_of_player_error), null);
+                    return;
+                }
                 startActivity(new Intent(MenuActivity.this, ScoreActivity.class));
             }
         });

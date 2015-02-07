@@ -21,19 +21,20 @@
 
     <!-- プレイヤー一覧 -->
     <string name="title_activity_player_list">プレイヤー一覧</string>
-    <string name="number_of_player_error">4人以上選択してください</string>
     <string name="player_registration">プレイヤー登録</string>
     <string name="delete">削除</string>
     <string name="delete_message">本当に削除してもいいですか?</string>
 
     <!-- プレイヤー登録 -->
     <string name="title_activity_player_registration">プレイヤー登録</string>
+    <string name="name_duplication_message">その名前は既に使用されています</string>
 
     <!-- 試合結果 -->
     <string name="title_activity_result">結果発表</string>
 
     <!-- 共通 -->
     <string name="menu">MENU</string>
+    <string name="number_of_player_error">4人以上選択してください</string>
     <string name="game_set">試合終了</string>
     <string name="game_seta_message">試合を終了しますか?</string>
     <string name="title_activity_ryukyoku_dialog">RyukyokuDialogActivity</string>

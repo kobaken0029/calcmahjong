@@ -2,6 +2,7 @@ package eval.wit.ai.calcmahjong.models.clients;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.Cursor;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -31,27 +32,33 @@ public class AppController extends Application {
         playersPointList = new ArrayList<>();
         NumOfDepositBar = 0;
 
-        // mock
-        Player p1 = new Player(1, "A君", "よろしく");
-        Player p2 = new Player(2, "B君", "よろしく");
-        Player p3 = new Player(3, "C君", "よろしく");
-        Player p4 = new Player(4, "D君", "よろしく");
-
-        ArrayList<Player> ps = new ArrayList<>();
-        ps.add(p1);
-        ps.add(p2);
-        ps.add(p3);
-        ps.add(p4);
-        setPlayers(ps);
+        setIsPlayers();
     }
 
     public DatabaseAdapter getDbAdapter() {
         return dbAdapter;
     }
 
-//    public void setDbAdapter(DatabaseAdapter dbAdapter) {
-//        this.dbAdapter = dbAdapter;
-//    }
+    /**
+     * プレイ中のプレイヤーをセットします。
+     */
+    private void setIsPlayers() {
+        ArrayList<Player> ps = new ArrayList<>();
+        dbAdapter.open();
+        Cursor c = dbAdapter.getIsPlayPlayer();
+        if (c.moveToFirst()) {
+            do {
+                Player player = new Player(
+                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_ID)),
+                        c.getString(c.getColumnIndex(DatabaseAdapter.COL_NAME)),
+                        c.getString(c.getColumnIndex(DatabaseAdapter.COL_MESSAGE)),
+                        c.getString(c.getColumnIndex(DatabaseAdapter.COL_IS_PLAY)).equals("1"));
+                ps.add(player);
+            } while (c.moveToNext());
+        }
+        dbAdapter.close();
+        setPlayers(ps);
+    }
 
     /**
      * 現在の半荘数を返します。

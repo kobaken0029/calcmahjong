@@ -11,6 +11,7 @@ import android.widget.EditText;
 import eval.wit.ai.calcmahjong.R;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.db.DatabaseAdapter;
+import eval.wit.ai.calcmahjong.utilities.UiUtil;
 
 public class PlayerRegistrationActivity extends ActionBarActivity {
     private EditText nameTxt;
@@ -48,6 +49,14 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             databaseAdapter.open();
+
+            // 名前の重複チェック
+            if (databaseAdapter.isDuplicationPlayer(nameTxt.getText().toString())) {
+                UiUtil.showToast(PlayerRegistrationActivity.this,
+                        getResources().getString(R.string.name_duplication_message));
+                databaseAdapter.close();
+                return;
+            }
             databaseAdapter.savePlayer(nameTxt.getText().toString(), messageTxt.getText().toString());
             databaseAdapter.close();
 

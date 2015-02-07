@@ -15,10 +15,11 @@ public class Player implements Serializable {
     public Player() {
     }
 
-    public Player(int id, String name, String message) {
+    public Player(int id, String name, String message, boolean isPlay) {
         this.id = id;
         this.name = name;
         this.message = message;
+        this.isPlay = isPlay;
     }
 
     public int getId() {

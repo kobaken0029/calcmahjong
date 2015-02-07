@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import eval.wit.ai.calcmahjong.models.entities.Player;
@@ -68,6 +69,16 @@ public class DatabaseAdapter {
     }
 
     /**
+     * プレイ中のプレイヤーを取得します。
+     * @return 検索結果カーソル
+     */
+    public Cursor getIsPlayPlayer() {
+        String where = COL_IS_PLAY + " = ?";
+        String[] param = { "1" };
+        return db.query(PLAYERS_TABLE_NAME, null, where, param, null, null, null);
+    }
+
+    /**
      * プレイヤーを保存します。
      * @param name 名前
      * @param message ひとこと
@@ -78,6 +89,7 @@ public class DatabaseAdapter {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         values.put(COL_NAME, name);
         values.put(COL_MESSAGE, message);
+        values.put(COL_IS_PLAY, 0);
         values.put(COL_CREATE_AT, sdf.format(dateNow));
         values.put(COL_UPDATE_AT, sdf.format(dateNow));
         try {
@@ -89,18 +101,17 @@ public class DatabaseAdapter {
 
     /**
      * プレイヤーを更新します。
-     * @param name 名前
-     * @param message ひとこと
      * @param player プレイヤー
      */
-    public void updatePlayer(String name, String message, Player player) {
+    public void updatePlayer(Player player) {
         Date dateNow = new Date();
         ContentValues values = new ContentValues();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String whereClause = COL_ID + " = ?";
         String[] whereArgs = { String.valueOf(player.getId()) };
-        values.put(COL_NAME, name);
-        values.put(COL_MESSAGE, message);
+        values.put(COL_NAME, player.getName());
+        values.put(COL_MESSAGE, player.getMessage());
+        values.put(COL_IS_PLAY, player.isPlay());
         values.put(COL_UPDATE_AT, sdf.format(dateNow));
         db.update(PLAYERS_TABLE_NAME, values, whereClause, whereArgs);
     }
@@ -123,8 +134,31 @@ public class DatabaseAdapter {
     }
 
 
-    public boolean isDuplicationPlayer(Player player) {
-        return false;
+    /**
+     * 名前が重複している場合はtrueを返します。
+     * @param name 名前
+     * @return 重複している場合はtrue
+     */
+    public boolean isDuplicationPlayer(String name) {
+        String where = COL_NAME + " = ?";
+        String[] param = { name };
+
+        Cursor c = db.query(PLAYERS_TABLE_NAME, null, where, param, null, null, null);
+
+
+        ArrayList<Player> list = new ArrayList<>();
+        if (c.moveToFirst()) {
+            do {
+                Player duplicatedPlayer = new Player(
+                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_ID)),
+                        c.getString(c.getColumnIndex(DatabaseAdapter.COL_NAME)),
+                        c.getString(c.getColumnIndex(DatabaseAdapter.COL_MESSAGE)),
+                        c.getString(c.getColumnIndex(DatabaseAdapter.COL_IS_PLAY)).equals("1"));
+                list.add(duplicatedPlayer);
+            } while (c.moveToNext());
+        }
+
+        return !list.isEmpty();
     }
 
 

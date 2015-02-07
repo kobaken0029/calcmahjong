@@ -3,6 +3,7 @@ package eval.wit.ai.calcmahjong.dialogs;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -28,7 +29,7 @@ public class NumberPickerDialog {
                            int minValue, int maxValue, DialogInterface.OnClickListener listener) {
         numberPicker.setMinValue(minValue);
         numberPicker.setMaxValue(maxValue);
-        new AlertDialog.Builder(context)
+        new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme))
                 .setTitle(msg)
                 .setView(view)
                 .setPositiveButton("OK", listener != null ? listener :

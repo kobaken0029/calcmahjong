@@ -54,6 +54,14 @@ public class ScoreActivity extends ActionBarActivity {
                 startActivityForResult(intent, Consts.REQUEST_CODE);
             }
         });
+
+        Button ryukyokuBtn = (Button) findViewById(R.id.ryukyoku);
+        ryukyokuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(ScoreActivity.this, RyukyokuActivity.class), Consts.REQUEST_CODE);
+            }
+        });
     }
 
     @Override
@@ -285,6 +293,10 @@ public class ScoreActivity extends ActionBarActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            if (callPlayer != null) {
+                                isCallPlayers.put(callPlayer.getId(), Boolean.TRUE);
+                            }
+
                             AudioUtil.play(mp, getApplicationContext(),
                                     Math.random() < 0.5 ? Consts.CALL_VOICE_1_URL : Consts.CALL_VOICE_2_URL,
                                     callVoiceListener(callPlayer));
@@ -311,7 +323,6 @@ public class ScoreActivity extends ActionBarActivity {
                 // 立直宣言者の点数から1000点引く
                 if (callPlayer != null) {
                     playersPoint.put(callPlayer.getId(), playersPoint.get(callPlayer.getId()) - Consts.SEN);
-                    isCallPlayers.put(callPlayer.getId(), Boolean.TRUE);
                     appController.setNumOfDepositBar(appController.getNumOfDepositBar() + 1);
                 }
                 setPlayersScore();

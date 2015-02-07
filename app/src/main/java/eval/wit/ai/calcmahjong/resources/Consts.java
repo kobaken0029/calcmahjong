@@ -12,6 +12,10 @@ public class Consts {
     public final static int REQUEST_CODE = 200;
     public final static int RYUKYOKU_CODE = 300;
 
+    /** 最大・最小本場数 */
+    public final static int MAX_NUMBER_OF_HONBA = 7;
+    public final static int MIN_NUMBER_OF_HONBA = 0;
+
     /** 聴牌情報 */
     public final static int TENPAI_ONE = 1;
     public final static int TENPAI_TWO = 2;

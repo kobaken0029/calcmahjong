@@ -15,8 +15,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="各項目を入力してください。"
         android:textColor="#FFFFFF00"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:padding="12dp">
@@ -155,7 +153,8 @@
                 android:hint="何本場かを入力してください。"
                 android:textColorHint="#88FFFFFF"
                 android:inputType="number"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:editable="false" />
 
             <TextView
                 android:layout_width="wrap_content"

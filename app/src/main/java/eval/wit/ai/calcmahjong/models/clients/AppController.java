@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import eval.wit.ai.calcmahjong.models.db.DatabaseAdapter;
 import eval.wit.ai.calcmahjong.models.entities.Player;
 
 /**
  * Created by koba on 2015/01/25.
  */
 public class AppController extends Application {
+    private DatabaseAdapter dbAdapter;
     private ArrayList<Player> players;
 
     private int gameCnt;
@@ -24,6 +26,7 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        dbAdapter = new DatabaseAdapter(getApplicationContext());
         gameCnt = 1;
         playersPointList = new ArrayList<>();
         NumOfDepositBar = 0;
@@ -41,6 +44,14 @@ public class AppController extends Application {
         ps.add(p4);
         setPlayers(ps);
     }
+
+    public DatabaseAdapter getDbAdapter() {
+        return dbAdapter;
+    }
+
+//    public void setDbAdapter(DatabaseAdapter dbAdapter) {
+//        this.dbAdapter = dbAdapter;
+//    }
 
     /**
      * 現在の半荘数を返します。

@@ -4,17 +4,56 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import eval.wit.ai.calcmahjong.R;
+import eval.wit.ai.calcmahjong.models.clients.AppController;
+import eval.wit.ai.calcmahjong.models.db.DatabaseAdapter;
 
 public class PlayerRegistrationActivity extends ActionBarActivity {
+    private EditText nameTxt;
+    private EditText messageTxt;
+    private Button registrationBtn;
+
+    private DatabaseAdapter databaseAdapter;
+    private AppController appController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_registration);
+        appController = (AppController) getApplication();
+        databaseAdapter = appController.getDbAdapter();
+
+        findView();
+
+        registrationBtn.setOnClickListener(registrationListener);
     }
 
+    /**
+     * リソースを紐付ける。
+     */
+    private void findView() {
+        nameTxt = (EditText) findViewById(R.id.nameTxt);
+        messageTxt = (EditText) findViewById(R.id.messageTxt);
+        registrationBtn = (Button) findViewById(R.id.registrationBtn);
+    }
+
+    /**
+     * 登録ボタンを押下した際のリスナー。
+     */
+    private View.OnClickListener registrationListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            databaseAdapter.open();
+            databaseAdapter.savePlayer(nameTxt.getText().toString(), messageTxt.getText().toString());
+            databaseAdapter.close();
+
+            finish();
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

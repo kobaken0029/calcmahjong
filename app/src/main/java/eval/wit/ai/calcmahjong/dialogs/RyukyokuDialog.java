@@ -1,4 +1,4 @@
-package eval.wit.ai.calcmahjong.activities;
+package eval.wit.ai.calcmahjong.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +31,7 @@ public class RyukyokuDialog {
     private ArrayList<Player> players;
 
     private MediaPlayer mp;
+    private Activity activity;
 
     /**
      * ダイアログを表示します。
@@ -37,6 +41,7 @@ public class RyukyokuDialog {
      */
     public void showDialog(final Context context, final Activity activity) {
         mp = new MediaPlayer();
+        this.activity = activity;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -49,7 +54,7 @@ public class RyukyokuDialog {
         // ダイアログのレイアウトに値をセット
         setView(context, activity, players);
 
-        new AlertDialog.Builder(context)
+        new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme))
                 .setTitle(context.getResources().getString(R.string.ryukyoku_title))
                 .setView(layout)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -62,10 +67,7 @@ public class RyukyokuDialog {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                mp.release();
-                                mp = null;
-                                dialog.cancel();
-                                activity.finish();
+                                finish(dialog);
                             }
                         }, Consts.DELAY_TIME);
                         AudioUtil.play(mp, context, Consts.RYUKYOKU_VOICE_URL, null);
@@ -74,9 +76,34 @@ public class RyukyokuDialog {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        finish(dialog);
+                    }
+                })
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                            finish(dialog);
+                            return true;
+                        }
+                        return false;
                     }
                 }).create().show();
+    }
+
+    /**
+     * ダイアログを終了します。
+     * @param dialog ダイアログ
+     */
+    private void finish(DialogInterface dialog) {
+        Log.d("HANDLER", "START");
+        if (mp != null) {
+            mp.release();
+            mp = null;
+        }
+        dialog.cancel();
+        activity.finish();
+        Log.d("HANDLER", "END");
     }
 
     /**

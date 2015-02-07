@@ -29,7 +29,8 @@
         <activity
             android:name=".activities.MahjongScoringActivity"
             android:label="@string/title_activity_mahjong_scoring"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
             android:name=".activities.PlayerRecordActivity"
@@ -52,8 +53,8 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.RyukyokuDialog"
-            android:label="@string/title_activity_ryukyoku_dialog" >
+            android:name=".activities.RyukyokuActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
     </application>
 

@@ -14,6 +14,7 @@
     <string name="title_activity_mahjong_scoring">点数計算</string>
     <string name="ryukyoku">流局</string>
     <string name="ryukyoku_title">聴牌者を選択してください</string>
+    <string name="honba_message">連荘数を選択してください</string>
 
     <!-- 成績照会 -->
     <string name="title_activity_player_record">成績</string>
@@ -21,6 +22,9 @@
     <!-- プレイヤー一覧 -->
     <string name="title_activity_player_list">プレイヤー一覧</string>
     <string name="number_of_player_error">4人以上選択してください</string>
+    <string name="player_registration">プレイヤー登録</string>
+    <string name="delete">削除</string>
+    <string name="delete_message">本当に削除してもいいですか?</string>
 
     <!-- プレイヤー登録 -->
     <string name="title_activity_player_registration">プレイヤー登録</string>

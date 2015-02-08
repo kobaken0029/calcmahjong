@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/seating_plan_dialog_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <eval.wit.ai.calcmahjong.models.listview.TouchListView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tlv="http://schemas.android.com/apk/res/eval.wit.ai.calcmahjong"
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawSelectorOnTop="false"
+        tlv:expanded_height="128dip"
+        tlv:grabber="@+id/player_seating"
+        tlv:normal_height="64dip"
+        tlv:remove_mode="none" />
+
+
+</LinearLayout>

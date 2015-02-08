@@ -10,6 +10,10 @@ import eval.wit.ai.calcmahjong.R;
  */
 public class ConstsManager {
 
+    /**
+     * プレイヤーの参加人数を取得。
+     * @return 参加人数
+     */
     public static int getNumOfPlayer() {
         return Consts.NUM_OF_PLAYER_YONMA;
     }

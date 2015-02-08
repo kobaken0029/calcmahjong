@@ -4,6 +4,9 @@
     <!-- MENU -->
     <string name="app_name">麻雀電卓</string>
 
+    <!-- 席順決め -->
+    <string name="seating_plan_title">席を決めてください</string>
+
     <!-- 点数表示 -->
     <string name="title_activity_score">点数表示</string>
     <string name="half_game_set_message">半荘を終了してもよいですか?</string>
@@ -39,6 +42,8 @@
     <string name="number_of_player_error">4人以上選択してください</string>
     <string name="game_set">試合終了</string>
     <string name="game_seta_message">試合を終了しますか?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="title_activity_ryukyoku_dialog">RyukyokuDialogActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

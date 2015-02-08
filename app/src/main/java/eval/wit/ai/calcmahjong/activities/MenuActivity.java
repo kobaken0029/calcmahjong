@@ -1,6 +1,5 @@
 package eval.wit.ai.calcmahjong.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -30,9 +29,7 @@ public class MenuActivity extends ActionBarActivity {
                     return;
                 }
 
-
-
-                startActivity(new Intent(MenuActivity.this, ScoreActivity.class));
+                startActivity(new Intent(MenuActivity.this, SeatingPlanDialogActivity.class));
             }
         });
 

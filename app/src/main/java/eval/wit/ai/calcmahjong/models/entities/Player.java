@@ -12,9 +12,19 @@ public class Player implements Serializable {
     private String message;
     private boolean isPlay;
 
+    /**
+     * デフォルトコンストラクタ
+     */
     public Player() {
     }
 
+    /**
+     * プレイヤーを初期化。
+     * @param id プレイヤーID
+     * @param name プレイヤー名
+     * @param message ひとこと
+     * @param isPlay プレイ状態
+     */
     public Player(int id, String name, String message, boolean isPlay) {
         this.id = id;
         this.name = name;
@@ -22,34 +32,66 @@ public class Player implements Serializable {
         this.isPlay = isPlay;
     }
 
+    /**
+     * プレイヤーのIDを取得。
+     * @return プレイヤーID
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * プレイヤーのIDをセット。
+     * @param id プレイヤーID
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * プレイヤー名を取得。
+     * @return プレイヤー名
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * プレイヤー名をセット。
+     * @param name プレイヤー名
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * ひとことを取得。
+     * @return ひとこと
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * ひとことをセット。
+     * @param message ひとこと
+     */
     public void setMessage(String message) {
         this.message = message;
     }
 
+    /**
+     * プレイ中かどうかを取得。
+     * @return プレイ中ならtrue
+     */
     public boolean isPlay() {
         return isPlay;
     }
 
+    /**
+     * プレイ中かどうかをセット。
+     * @param isPlay プレイ状態
+     */
     public void setPlay(boolean isPlay) {
         this.isPlay = isPlay;
     }

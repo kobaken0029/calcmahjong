@@ -140,7 +140,7 @@ public class SeatingListDialogActivity extends ListActivity {
             TextView direction = (TextView) row.findViewById(R.id.direction);
             switch (position) {
                 case 0:
-                    direction.setText(getResources().getString(R.string.east);
+                    direction.setText(getResources().getString(R.string.east));
                     break;
                 case 1:
                     direction.setText(getResources().getString(R.string.south));

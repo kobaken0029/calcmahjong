@@ -18,6 +18,20 @@ public class Record implements Serializable {
     private int winning;
     private int discarding;
 
+    public Record(int id, int playerId, double totalScore, int totalPlay,
+                  int top, int second, int third, int last, int winning, int discarding) {
+        this.id = id;
+        this.playerId = playerId;
+        this.totalScore = totalScore;
+        this.totalPlay = totalPlay;
+        this.top = top;
+        this.second = second;
+        this.third = third;
+        this.last = last;
+        this.winning = winning;
+        this.discarding = discarding;
+    }
+
     public int getId() {
         return id;
     }

@@ -15,28 +15,31 @@ public class UiUtil {
 
     /**
      * ダイアログを表示。
-     * @param c コンテキスト
-     * @param msg メッセージ
+     *
+     * @param c        コンテキスト
+     * @param msg      メッセージ
      * @param listener リスナー
      */
     public static void showDialog(Context c, String msg, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(c, R.style.AppTheme));
         builder.setMessage(msg)
-                .setPositiveButton("OK", listener != null ? listener : new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
+                .setPositiveButton(c.getResources().getString(R.string.ok),
+                        listener != null ? listener : new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
                 .setCancelable(false);
 
         if (listener != null) {
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+            builder.setNegativeButton(c.getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
         }
 
         builder.show();
@@ -44,7 +47,8 @@ public class UiUtil {
 
     /**
      * トーストを表示。
-     * @param c コンテキスト
+     *
+     * @param c   コンテキスト
      * @param msg メッセージ
      */
     public static void showToast(Context c, String msg) {

@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp">
-git 
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -140,7 +140,7 @@ git
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="流局"
+                android:text="@string/ryukyoku"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/ryukyoku"
                 android:background="@drawable/button"
@@ -149,7 +149,7 @@ git
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="アガリ"
+                android:text="@string/win"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/calc"
                 android:background="@drawable/button" />

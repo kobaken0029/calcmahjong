@@ -3,12 +3,15 @@
 
     <!-- MENU -->
     <string name="app_name">麻雀電卓</string>
+    <string name="game_start">ゲーム開始</string>
+    <string name="setting">設定</string>
 
     <!-- 席順決め -->
     <string name="seating_plan_title">席を決めてください</string>
 
     <!-- 点数表示 -->
     <string name="title_activity_score">点数表示</string>
+    <string name="win">アガリ</string>
     <string name="half_game_set_message">半荘を終了してもよいですか?</string>
     <string name="call_message">立直しますか?</string>
     <string name="already_call_message">既に立直済みです</string>
@@ -18,9 +21,24 @@
     <string name="ryukyoku">流局</string>
     <string name="ryukyoku_title">聴牌者を選択してください</string>
     <string name="honba_message">連荘数を選択してください</string>
+    <string name="activity_mahjong_scoring_header_message">各項目を入力してください</string>
+    <string name="winner">和了者</string>
+    <string name="loser">放銃者</string>
+    <string name="num_of_han">飜数</string>
+    <string name="num_of_fu">符数</string>
+    <string name="parent">親</string>
+    <string name="how_many_honba_message">何本場かを入力してください</string>
+    <string name="honba">本場</string>
+    <string name="calc">計算</string>
 
     <!-- 成績照会 -->
     <string name="title_activity_player_record">成績</string>
+    <string name="player_name">名前</string>
+    <string name="player_message">ひとこと</string>
+    <string name="player_score">スコア</string>
+    <string name="num_of_player_win">和了数</string>
+    <string name="num_of_player_lose">放銃数</string>
+    <string name="player_top_rate">トップ率</string>
 
     <!-- プレイヤー一覧 -->
     <string name="title_activity_player_list">プレイヤー一覧</string>
@@ -30,12 +48,21 @@
 
     <!-- プレイヤー登録 -->
     <string name="title_activity_player_registration">プレイヤー登録</string>
+    <string name="registration">登録</string>
+    <string name="name">name</string>
+    <string name="message">message</string>
     <string name="name_duplication_message">その名前は既に使用されています</string>
     <string name="name_nothing_message">名前を入力してください</string>
     <string name="number_of_name_over_message">名前は4文字以内で入力してください</string>
 
     <!-- 試合結果 -->
     <string name="title_activity_result">結果発表</string>
+    <string name="num_of_hantyan_1">1</string>
+    <string name="num_of_hantyan_2">2</string>
+    <string name="num_of_hantyan_3">3</string>
+    <string name="num_of_hantyan_4">4</string>
+    <string name="total">計</string>
+    <string name="replay">もう半荘！</string>
 
     <!-- 共通 -->
     <string name="menu">MENU</string>

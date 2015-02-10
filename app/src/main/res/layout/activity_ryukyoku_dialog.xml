@@ -12,7 +12,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New CheckBox"
+        android:text=""
         android:id="@+id/player_1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -21,7 +21,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New CheckBox"
+        android:text=""
         android:id="@+id/player_2"
         android:layout_below="@+id/player_1"
         android:layout_marginBottom="5dp" />
@@ -29,7 +29,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New CheckBox"
+        android:text=""
         android:id="@+id/player_3"
         android:layout_below="@+id/player_2"
         android:layout_marginBottom="5dp" />
@@ -37,7 +37,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New CheckBox"
+        android:text=""
         android:id="@+id/player_4"
         android:layout_below="@+id/player_3" />
 

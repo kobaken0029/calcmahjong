@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="各項目を入力してください。"
+        android:text="@string/activity_mahjong_scoring_header_message"
         android:textColor="#FFFFFF00"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="和了者"
+                android:text="@string/winner"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/winner"
                 android:layout_marginRight="18dp" />
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="放銃者"
+                android:text="@string/loser"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/loser"
                 android:layout_marginRight="18dp" />
@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="飜数"
+                android:text="@string/num_of_han"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/han"
                 android:layout_marginRight="36dp" />
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="符数"
+                android:text="@string/num_of_fu"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/fuTxt"
                 android:layout_marginRight="36dp" />
@@ -128,7 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="親"
+                android:text="@string/parent"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/isParentTxt"
                 android:layout_marginRight="50dp" />
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/honba"
                 android:text=""
-                android:hint="何本場かを入力してください。"
+                android:hint="@string/how_many_honba_message"
                 android:textColorHint="#88FFFFFF"
                 android:inputType="number"
                 android:layout_marginRight="5dp"
@@ -160,7 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="本場"
+                android:text="@string/honba"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/honbaTxt" />
         </LinearLayout>
@@ -174,7 +174,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="計算"
+                android:text="@string/calc"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/calc"
                 android:background="@drawable/button" />

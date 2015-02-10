@@ -108,7 +108,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="2dp"
-                        android:text="1"
+                        android:text="@string/num_of_hantyan_1"
                         android:textColor="#FFFFFFFF" />
                 </LinearLayout>
 
@@ -188,7 +188,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="2dp"
-                        android:text="2"
+                        android:text="@string/num_of_hantyan_2"
                         android:textColor="#FFFFFFFF" />
                 </LinearLayout>
 
@@ -268,7 +268,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="2dp"
-                        android:text="3"
+                        android:text="@string/num_of_hantyan_3"
                         android:textColor="#FFFFFFFF" />
                 </LinearLayout>
 
@@ -348,7 +348,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="2dp"
-                        android:text="4"
+                        android:text="@string/num_of_hantyan_4"
                         android:textColor="#FFFFFFFF" />
                 </LinearLayout>
 
@@ -426,7 +426,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="2dp"
-                        android:text="計"
+                        android:text="@string/total"
                         android:textColor="#FFFFFFFF" />
                 </LinearLayout>
 
@@ -496,7 +496,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="もう半荘！"
+                android:text="@string/replay"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/rePlay"
                 android:background="@drawable/button"
@@ -505,7 +505,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ゲーム終了"
+                android:text="@string/game_set"
                 android:textColor="#FFFFFFFF"
                 android:id="@+id/finish"
                 android:background="@drawable/button" />

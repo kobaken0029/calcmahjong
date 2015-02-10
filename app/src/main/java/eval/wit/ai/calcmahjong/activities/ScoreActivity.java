@@ -338,7 +338,7 @@ public class ScoreActivity extends ActionBarActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            UiUtil.showDialog(ScoreActivity.this, "現在の半荘の成績は反映されません\n本当に終了しますか?",
+                            UiUtil.showDialog(ScoreActivity.this, getResources().getString(R.string.really_half_game_set_message),
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

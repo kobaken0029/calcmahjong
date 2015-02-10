@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import eval.wit.ai.calcmahjong.R;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
@@ -41,10 +42,17 @@ public class SeatingListDialogActivity extends ListActivity {
         appController = (AppController) getApplication();
         players = appController.getPlayers();
 
+        HashMap<Integer, Integer> winnerHashMap = new HashMap<>();
+        HashMap<Integer, Integer> discardingHashMap = new HashMap<>();
 
         for (Player p : players) {
             array.add(p.getName());
+
+            winnerHashMap.put(p.getId(), 0);
+            discardingHashMap.put(p.getId(), 0);
         }
+        appController.setWinningHashMap(winnerHashMap);
+        appController.setDiscardingHashMap(discardingHashMap);
 
         adapter = new SeatAdapter();
         setListAdapter(adapter);

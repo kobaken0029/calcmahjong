@@ -21,6 +21,8 @@ public class AppController extends Application {
 
     private int gameCnt;
     private List<HashMap<Integer, Integer>> playersPointList;
+    private HashMap<Integer, Integer> winningHashMap;
+    private HashMap<Integer, Integer> discardingHashMap;
 
     private int NumOfDepositBar;
 
@@ -30,6 +32,8 @@ public class AppController extends Application {
         dbAdapter = new DatabaseAdapter(getApplicationContext());
         gameCnt = 1;
         playersPointList = new ArrayList<>();
+        winningHashMap = new HashMap<>();
+        discardingHashMap = new HashMap<>();
         NumOfDepositBar = 0;
 
         setIsPlayers();
@@ -130,5 +134,21 @@ public class AppController extends Application {
      */
     public void setNumOfDepositBar(int numOfDepositBar) {
         NumOfDepositBar = numOfDepositBar;
+    }
+
+    public HashMap<Integer, Integer> getWinningHashMap() {
+        return winningHashMap;
+    }
+
+    public void setWinningHashMap(HashMap<Integer, Integer> winningHashMap) {
+        this.winningHashMap = winningHashMap;
+    }
+
+    public HashMap<Integer, Integer> getDiscardingHashMap() {
+        return discardingHashMap;
+    }
+
+    public void setDiscardingHashMap(HashMap<Integer, Integer> discardingHashMap) {
+        this.discardingHashMap = discardingHashMap;
     }
 }

@@ -1,5 +1,6 @@
 package eval.wit.ai.calcmahjong.activities;
 
+import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -48,21 +49,11 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
     private View.OnClickListener registrationListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            databaseAdapter.open();
 
             // 名前有無判定
             if (nameTxt.getText().toString().equals("")) {
                 UiUtil.showToast(PlayerRegistrationActivity.this,
                         getResources().getString(R.string.name_nothing_message));
-                databaseAdapter.close();
-                return;
-            }
-
-            // 名前の重複チェック
-            if (databaseAdapter.isDuplicationPlayer(nameTxt.getText().toString())) {
-                UiUtil.showToast(PlayerRegistrationActivity.this,
-                        getResources().getString(R.string.name_duplication_message));
-                databaseAdapter.close();
                 return;
             }
 
@@ -70,12 +61,34 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
             if (nameTxt.getText().toString().length() > 4) {
                 UiUtil.showToast(PlayerRegistrationActivity.this,
                         getResources().getString(R.string.number_of_name_over_message));
-                databaseAdapter.close();
                 return;
             }
 
-            databaseAdapter.savePlayer(nameTxt.getText().toString(), messageTxt.getText().toString());
-            databaseAdapter.close();
+            try {
+                databaseAdapter.open();
+
+                // 名前の重複チェック
+                if (databaseAdapter.isDuplicationPlayer(nameTxt.getText().toString())) {
+                    UiUtil.showToast(PlayerRegistrationActivity.this,
+                            getResources().getString(R.string.name_duplication_message));
+                    databaseAdapter.close();
+                    return;
+                }
+
+                // プレイヤー登録
+                databaseAdapter.savePlayer(nameTxt.getText().toString(), messageTxt.getText().toString());
+                databaseAdapter.close();
+
+                databaseAdapter.open();
+                Cursor c = databaseAdapter.getPlayerByName(nameTxt.getText().toString());
+                if (c.moveToFirst()) {
+                    // 成績登録
+                    databaseAdapter.saveRecord(c.getInt(c.getColumnIndex(DatabaseAdapter.COL_ID)));
+                }
+                databaseAdapter.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             finish();
         }

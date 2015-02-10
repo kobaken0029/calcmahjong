@@ -20,6 +20,7 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import eval.wit.ai.calcmahjong.R;
 import eval.wit.ai.calcmahjong.dialogs.NumberPickerDialog;
@@ -236,9 +237,12 @@ public class MahjongScoringActivity extends ActionBarActivity {
             intent.putExtra("winner", winner);
             intent.putExtra("parent", parent);
 
+            countWinning();
+
             if (loser != null) {
                 intent.putExtra("loser", loser);
                 uri = Consts.RON_VOICE_URL;
+                countDiscarding();
             }
 
             setResult(RESULT_OK, intent);
@@ -255,6 +259,24 @@ public class MahjongScoringActivity extends ActionBarActivity {
             AudioUtil.play(mp, getApplicationContext(), uri, null);
         }
     };
+
+    /**
+     * 和了数をカウントする。
+     */
+    private void countWinning() {
+        HashMap<Integer, Integer> winnerHashMap = appController.getWinningHashMap();
+        winnerHashMap.put(winner.getId(), winnerHashMap.get(winner.getId()) + 1);
+        appController.setWinningHashMap(winnerHashMap);
+    }
+
+    /**
+     * 放銃数をカウントする。
+     */
+    private void countDiscarding() {
+        HashMap<Integer, Integer> discardingHashMap = appController.getDiscardingHashMap();
+        discardingHashMap.put(loser.getId(), discardingHashMap.get(loser.getId()) + 1);
+        appController.setDiscardingHashMap(discardingHashMap);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

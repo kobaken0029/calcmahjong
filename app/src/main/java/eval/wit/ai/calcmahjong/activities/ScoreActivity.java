@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -335,15 +334,21 @@ public class ScoreActivity extends ActionBarActivity {
         if (keyCode != KeyEvent.KEYCODE_BACK) {
             return super.onKeyDown(keyCode, event);
         } else {
-            UiUtil.showDialog(ScoreActivity.this, getResources().getString(R.string.game_seta_message),
+            UiUtil.showDialog(ScoreActivity.this, getResources().getString(R.string.game_set_message),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            appController.setGameCnt(1);
-                            appController.setPlayersPointList(new ArrayList<HashMap<Integer, Integer>>());
-                            appController.setNumOfDepositBar(0);
-                            finish();
+                            UiUtil.showDialog(ScoreActivity.this, "現在の半荘の成績は反映されません\n本当に終了しますか?",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                            appController.setGameCnt(1);
+                                            appController.setPlayersPointList(new ArrayList<HashMap<Integer, Integer>>());
+                                            appController.setNumOfDepositBar(0);
+                                            finish();
+                                        }
+                                    });
                         }
                     });
             return false;

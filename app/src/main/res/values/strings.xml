@@ -35,10 +35,11 @@
     <string name="title_activity_player_record">成績</string>
     <string name="player_name">名前</string>
     <string name="player_message">ひとこと</string>
-    <string name="player_score">スコア</string>
+    <string name="player_score">総スコア</string>
     <string name="num_of_player_win">和了数</string>
     <string name="num_of_player_lose">放銃数</string>
     <string name="player_top_rate">トップ率</string>
+    <string name="num_of_play">総半荘数</string>
 
     <!-- プレイヤー一覧 -->
     <string name="title_activity_player_list">プレイヤー一覧</string>
@@ -68,7 +69,7 @@
     <string name="menu">MENU</string>
     <string name="number_of_player_error">選択できる人数は4人です</string>
     <string name="game_set">試合終了</string>
-    <string name="game_seta_message">試合を終了しますか?</string>
+    <string name="game_set_message">試合を終了しますか?</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="east">東</string>

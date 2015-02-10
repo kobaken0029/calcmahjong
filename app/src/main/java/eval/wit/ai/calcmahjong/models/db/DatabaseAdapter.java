@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import eval.wit.ai.calcmahjong.models.entities.Player;
+import eval.wit.ai.calcmahjong.models.entities.Record;
 
 /**
  * Created by koba on 2015/01/25.
@@ -88,6 +89,17 @@ public class DatabaseAdapter {
     public Cursor getIsPlayPlayer() {
         String where = COL_IS_PLAY + " = ?";
         String[] param = { "1" };
+        return db.query(PLAYERS_TABLE_NAME, null, where, param, null, null, null);
+    }
+
+    /**
+     * 名前からプレイヤーを取得します。
+     * @param name プレイヤー名
+     * @return 検索結果カーソル
+     */
+    public Cursor getPlayerByName(String name) {
+        String where = COL_NAME + " = ?";
+        String[] param = { name };
         return db.query(PLAYERS_TABLE_NAME, null, where, param, null, null, null);
     }
 
@@ -177,21 +189,33 @@ public class DatabaseAdapter {
     //
     // 成績記録用
     //
+
+    /**
+     * プレイヤーの成績を取得します。
+     * @return 検索結果カーソル
+     */
+    public Cursor getPlayerRecord(int playerId) {
+        String where = COL_PLAYER_ID + " = ?";
+        String[] param = { String.valueOf(playerId) };
+        return db.query(RECORD_TABLE_NAME, null, where, param, null, null, null);
+    }
+
     /**
      * 成績を保存します。
-     * @param score スコア
-     * @param message ひとこと
      */
-    public void saveRecord(int score, String message) {
+    public void saveRecord(int playerId) {
         Date dateNow = new Date();
         ContentValues values = new ContentValues();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        values.put(COL_SCORE, score);
-        values.put(COL_NUM_OF_PLAY, 1);
+        values.put(COL_PLAYER_ID, playerId);
+        values.put(COL_SCORE, 0);
+        values.put(COL_NUM_OF_PLAY, 0);
         values.put(COL_TOP, 0);
         values.put(COL_SECOND, 0);
         values.put(COL_THIRD, 0);
         values.put(COL_LAST, 0);
+        values.put(COL_WINNING, 0);
+        values.put(COL_DISCARDING, 0);
         values.put(COL_CREATE_AT, sdf.format(dateNow));
         values.put(COL_UPDATE_AT, sdf.format(dateNow));
         try {
@@ -203,19 +227,64 @@ public class DatabaseAdapter {
 
     /**
      * 成績を更新します。
-     * @param player プレイヤー
+     * @param record 成績
      */
-    public void updateRecord(Player player) {
+    public void updateRecord(Record record, int ranking) {
         Date dateNow = new Date();
         ContentValues values = new ContentValues();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String whereClause = COL_ID + " = ?";
-        String[] whereArgs = { String.valueOf(player.getId()) };
-        values.put(COL_NAME, player.getName());
-        values.put(COL_MESSAGE, player.getMessage());
-        values.put(COL_IS_PLAY, player.isPlay());
+        String[] whereArgs = { String.valueOf(record.getId()) };
+        int top = record.getTop();
+        int second = record.getSecond();
+        int third = record.getThird();
+        int last = record.getLast();
+
+        switch (ranking) {
+            case 1:
+                top++;
+                break;
+            case 2:
+                second++;
+                break;
+            case 3:
+                third++;
+                break;
+            case 4:
+                last++;
+                break;
+            default:
+                break;
+        }
+
+        values.put(COL_SCORE, record.getTotalScore());
+        values.put(COL_NUM_OF_PLAY, record.getTotalPlay() + 1);
+        values.put(COL_TOP, top);
+        values.put(COL_SECOND, second);
+        values.put(COL_THIRD, third);
+        values.put(COL_LAST, last);
+        values.put(COL_WINNING, record.getWinning());
+        values.put(COL_DISCARDING, record.getDiscarding());
+        values.put(COL_CREATE_AT, sdf.format(dateNow));
         values.put(COL_UPDATE_AT, sdf.format(dateNow));
-        db.update(PLAYERS_TABLE_NAME, values, whereClause, whereArgs);
+        db.update(RECORD_TABLE_NAME, values, whereClause, whereArgs);
+    }
+
+    /**
+     * すべての成績を削除します。
+     * @return 成否
+     */
+    public boolean daleteAllRecords() {
+        return db.delete(RECORD_TABLE_NAME, null, null) > 0;
+    }
+
+    /**
+     * 指定IDの成績を削除します。
+     * @param id 成績ID
+     * @return 成否
+     */
+    public boolean deleteRecord(int id) {
+        return db.delete(RECORD_TABLE_NAME, COL_ID + "=" + id, null) > 0;
     }
 
 
@@ -239,7 +308,7 @@ public class DatabaseAdapter {
                     + COL_UPDATE_AT + " TEXT NOT NULL);");
             db.execSQL("CREATE TABLE " + RECORD_TABLE_NAME + " ("
                     + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + "FOREIGN KEY(" + COL_PLAYER_ID + ") REFERENCES" + PLAYERS_TABLE_NAME + "(" + COL_ID + "),"
+                    + COL_PLAYER_ID + " INTEGER UNIQUE NOT NULL,"
                     + COL_SCORE + " DOUBLE,"
                     + COL_NUM_OF_PLAY + " INTEGER NOT NULL,"
                     + COL_TOP + " INTEGER NOT NULL,"

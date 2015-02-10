@@ -2,6 +2,7 @@ package eval.wit.ai.calcmahjong.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -19,7 +20,10 @@ import java.util.List;
 
 import eval.wit.ai.calcmahjong.R;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
+import eval.wit.ai.calcmahjong.models.db.DatabaseAdapter;
 import eval.wit.ai.calcmahjong.models.entities.Player;
+import eval.wit.ai.calcmahjong.models.entities.Record;
+import eval.wit.ai.calcmahjong.resources.ConstsManager;
 import eval.wit.ai.calcmahjong.utilities.UiUtil;
 
 public class ResultActivity extends ActionBarActivity {
@@ -35,6 +39,7 @@ public class ResultActivity extends ActionBarActivity {
 
     private List<Player> players;
     private List<HashMap<Integer, Integer>> playersPointList;
+    private int[] playerTotalScore = new int[ConstsManager.getNumOfPlayer()];
 
     private int gameCnt;
 
@@ -90,10 +95,10 @@ public class ResultActivity extends ActionBarActivity {
      * 現在のスコアを表にセット。
      */
     private void setScoreView() {
-        int player1TotalScore = 0;
-        int player2TotalScore = 0;
-        int player3TotalScore = 0;
-        int player4TotalScore = 0;
+//        int player1TotalScore = 0;
+//        int player2TotalScore = 0;
+//        int player3TotalScore = 0;
+//        int player4TotalScore = 0;
 
         String player1ScoreTxtResId;
         String player2ScoreTxtResId;
@@ -134,16 +139,16 @@ public class ResultActivity extends ActionBarActivity {
             player3ScoreTxt[i].setText(playersPointList.get(i).get(players.get(2).getId()).toString());
             player4ScoreTxt[i].setText(playersPointList.get(i).get(players.get(3).getId()).toString());
 
-            player1TotalScore += playersPointList.get(i).get(players.get(0).getId());
-            player2TotalScore += playersPointList.get(i).get(players.get(1).getId());
-            player3TotalScore += playersPointList.get(i).get(players.get(2).getId());
-            player4TotalScore += playersPointList.get(i).get(players.get(3).getId());
+            playerTotalScore[0] += playersPointList.get(i).get(players.get(0).getId());
+            playerTotalScore[1] += playersPointList.get(i).get(players.get(1).getId());
+            playerTotalScore[2] += playersPointList.get(i).get(players.get(2).getId());
+            playerTotalScore[3] += playersPointList.get(i).get(players.get(3).getId());
         }
 
-        player1ScoreTotalTxt.setText(String.valueOf(player1TotalScore));
-        player2ScoreTotalTxt.setText(String.valueOf(player2TotalScore));
-        player3ScoreTotalTxt.setText(String.valueOf(player3TotalScore));
-        player4ScoreTotalTxt.setText(String.valueOf(player4TotalScore));
+        player1ScoreTotalTxt.setText(String.valueOf(playerTotalScore[0]));
+        player2ScoreTotalTxt.setText(String.valueOf(playerTotalScore[1]));
+        player3ScoreTotalTxt.setText(String.valueOf(playerTotalScore[2]));
+        player4ScoreTotalTxt.setText(String.valueOf(playerTotalScore[3]));
     }
 
     /**
@@ -155,7 +160,7 @@ public class ResultActivity extends ActionBarActivity {
         // プレイヤーの持ち点からスコアを算出
         for (Player p : players) {
             Log.d("HASH_BEFORE", playersPoint.get(p.getId()).toString());
-            playersPoint.put(p.getId(),  (playersPoint.get(p.getId()) - 30000) / 1000);
+            playersPoint.put(p.getId(), (playersPoint.get(p.getId()) - 30000) / 1000);
             Log.d("HASH_AFTER", playersPoint.get(p.getId()).toString());
         }
 
@@ -209,16 +214,91 @@ public class ResultActivity extends ActionBarActivity {
      * 試合終了時の処理。
      */
     private void gameSet() {
-        UiUtil.showDialog(ResultActivity.this, "試合を終了しますか？", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                appController.setGameCnt(1);
-                appController.setPlayersPointList(new ArrayList<HashMap<Integer, Integer>>());
-                appController.setNumOfDepositBar(0);
-                finish();
+        UiUtil.showDialog(ResultActivity.this, getResources().getString(R.string.game_set_message),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        appController.setGameCnt(1);
+                        appController.setPlayersPointList(new ArrayList<HashMap<Integer, Integer>>());
+                        appController.setNumOfDepositBar(0);
+
+                        DatabaseAdapter adapter = appController.getDbAdapter();
+                        adapter.open();
+                        int i = 0;
+                        for (Player p : players) {
+                            Record record = null;
+                            int score = 0;
+
+                            // 成績を取得
+                            Cursor c = adapter.getPlayerRecord(p.getId());
+                            if (c.moveToFirst()) {
+                                record = new Record(
+                                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_ID)),
+                                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_PLAYER_ID)),
+                                        c.getDouble(c.getColumnIndex(DatabaseAdapter.COL_SCORE)),
+                                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_NUM_OF_PLAY)),
+                                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_TOP)),
+                                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_SECOND)),
+                                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_THIRD)),
+                                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_LAST)),
+                                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_WINNING)),
+                                        c.getInt(c.getColumnIndex(DatabaseAdapter.COL_DISCARDING)));
+                            }
+
+                            // 該当プレイヤーの総スコアを取得
+                            switch (i) {
+                                case 0:
+                                    score = Integer.parseInt(player1ScoreTotalTxt.getText().toString());
+                                    break;
+                                case 1:
+                                    score = Integer.parseInt(player2ScoreTotalTxt.getText().toString());
+                                    break;
+                                case 2:
+                                    score = Integer.parseInt(player3ScoreTotalTxt.getText().toString());
+                                    break;
+                                case 3:
+                                    score = Integer.parseInt(player4ScoreTotalTxt.getText().toString());
+                                    break;
+                            }
+
+                            if (record != null) {
+                                record.setTotalScore(score);
+                                record.setWinning(record.getWinning() + appController.getWinningHashMap().get(p.getId()));
+                                record.setDiscarding(record.getDiscarding() + appController.getDiscardingHashMap().get(p.getId()));
+                            }
+
+                            // 成績を更新
+                            adapter.updateRecord(record, getRanking(i));
+                            i++;
+                        }
+                        adapter.close();
+
+                        finish();
+                    }
+                });
+    }
+
+    /**
+     * プレイヤーの順位を取得。
+     * @param numOfSeat プレイヤーの席
+     * @return 順位
+     */
+    private int getRanking(int numOfSeat) {
+        int ranking = 1;
+
+        double buf = playerTotalScore[numOfSeat];
+        for (int i = 0; i < playerTotalScore.length; i++) {
+            if (i == numOfSeat) {
+                continue;
             }
-        });
+
+            if (buf < playerTotalScore[i]) {
+                ranking++;
+            }
+        }
+
+        return ranking;
     }
 
     @Override

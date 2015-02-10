@@ -39,7 +39,7 @@
 
     <!-- 共通 -->
     <string name="menu">MENU</string>
-    <string name="number_of_player_error">4人以上選択してください</string>
+    <string name="number_of_player_error">選択できる人数は4人です</string>
     <string name="game_set">試合終了</string>
     <string name="game_seta_message">試合を終了しますか?</string>
     <string name="ok">OK</string>

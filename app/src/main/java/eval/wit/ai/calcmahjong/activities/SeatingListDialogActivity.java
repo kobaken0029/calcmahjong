@@ -25,7 +25,7 @@ import eval.wit.ai.calcmahjong.resources.ConstsManager;
 /**
  * Created by koba on 2015/02/07.
  */
-public class SeatingPlanDialogActivity extends ListActivity {
+public class SeatingListDialogActivity extends ListActivity {
     private AppController appController;
 
     private ArrayList<Player> players;
@@ -35,7 +35,7 @@ public class SeatingPlanDialogActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_seating_plan_list);
+        setContentView(R.layout.activity_seating_list);
 
         TouchListView tlv = (TouchListView) getListView();
         appController = (AppController) getApplication();
@@ -52,7 +52,7 @@ public class SeatingPlanDialogActivity extends ListActivity {
         tlv.setDropListener(onDrop);
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.activity_seating_plan_list,
+        View layout = inflater.inflate(R.layout.activity_seating_list,
                 (ViewGroup) findViewById(R.id.seating_plan_dialog_layout));
 
         // ルートビューを取得
@@ -88,7 +88,7 @@ public class SeatingPlanDialogActivity extends ListActivity {
 
                         // 席順を保ち、プレイヤーのリストをセット
                         appController.setPlayers(ps);
-                        startActivity(new Intent(SeatingPlanDialogActivity.this, ScoreActivity.class));
+                        startActivity(new Intent(SeatingListDialogActivity.this, ScoreActivity.class));
                         finish();
                     }
                 })
@@ -123,7 +123,7 @@ public class SeatingPlanDialogActivity extends ListActivity {
 
     class SeatAdapter extends ArrayAdapter<String> {
         SeatAdapter() {
-            super(SeatingPlanDialogActivity.this, R.layout.row_seating, array);
+            super(SeatingListDialogActivity.this, R.layout.row_seating, array);
         }
 
         public View getView(int position, View convertView,

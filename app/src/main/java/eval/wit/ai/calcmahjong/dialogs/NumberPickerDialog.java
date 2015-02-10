@@ -32,13 +32,13 @@ public class NumberPickerDialog {
         new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme))
                 .setTitle(msg)
                 .setView(view)
-                .setPositiveButton("OK", listener != null ? listener :
+                .setPositiveButton(context.getResources().getString(R.string.ok), listener != null ? listener :
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 dialog.cancel();
                             }
                         })
-                .setNegativeButton("Cancel",
+                .setNegativeButton(context.getResources().getString(R.string.cancel),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 dialog.cancel();

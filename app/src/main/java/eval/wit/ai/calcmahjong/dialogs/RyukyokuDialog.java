@@ -44,7 +44,6 @@ public class RyukyokuDialog {
         this.activity = activity;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         layout = inflater.inflate(R.layout.activity_ryukyoku_dialog,
                 (ViewGroup) activity.findViewById(R.id.ryukyoku_dialog_layout));
 
@@ -57,7 +56,7 @@ public class RyukyokuDialog {
         new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme))
                 .setTitle(context.getResources().getString(R.string.ryukyoku_title))
                 .setView(layout)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(context.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
                         Intent intent = new Intent();
@@ -73,7 +72,7 @@ public class RyukyokuDialog {
                         AudioUtil.play(mp, context, Consts.RYUKYOKU_VOICE_URL, null);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(context.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish(dialog);

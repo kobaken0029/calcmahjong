@@ -57,7 +57,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
         <activity
-            android:name=".activities.SeatingPlanDialogActivity"
+            android:name=".activities.SeatingListDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
     </application>

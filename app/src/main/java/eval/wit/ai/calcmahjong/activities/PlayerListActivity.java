@@ -134,7 +134,7 @@ public class PlayerListActivity extends ActionBarActivity {
                 }
             }
 
-            if (playToPlayers.size() < ConstsManager.getNumOfPlayer()) {
+            if (playToPlayers.size() != ConstsManager.getNumOfPlayer()) {
                 UiUtil.showDialog(PlayerListActivity.this, getResources().getString(R.string.number_of_player_error), null);
             } else {
                 dbAdapter.open();

@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import eval.wit.ai.calcmahjong.R;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
+import eval.wit.ai.calcmahjong.resources.ConstsManager;
 import eval.wit.ai.calcmahjong.utilities.UiUtil;
 
 
@@ -24,12 +25,12 @@ public class MenuActivity extends ActionBarActivity {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (((AppController) getApplication()).getPlayers().size() < 4) {
+                if (((AppController) getApplication()).getPlayers().size() != ConstsManager.getNumOfPlayer()) {
                     UiUtil.showDialog(MenuActivity.this, getResources().getString(R.string.number_of_player_error), null);
                     return;
                 }
 
-                startActivity(new Intent(MenuActivity.this, SeatingPlanDialogActivity.class));
+                startActivity(new Intent(MenuActivity.this, SeatingListDialogActivity.class));
             }
         });
 

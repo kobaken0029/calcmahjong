@@ -129,6 +129,7 @@ public class SeatingListDialogActivity extends ListActivity {
         }
     };
 
+
     class SeatAdapter extends ArrayAdapter<String> {
         SeatAdapter() {
             super(SeatingListDialogActivity.this, R.layout.row_seating, array);

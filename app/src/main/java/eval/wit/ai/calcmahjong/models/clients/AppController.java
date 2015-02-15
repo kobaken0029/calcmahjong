@@ -1,10 +1,8 @@
 package eval.wit.ai.calcmahjong.models.clients;
 
 import android.app.Application;
-import android.content.Context;
 import android.database.Cursor;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +22,7 @@ public class AppController extends Application {
     private HashMap<Integer, Integer> winningHashMap;
     private HashMap<Integer, Integer> discardingHashMap;
 
-    private int NumOfDepositBar;
+    private int numOfDepositBar;
 
     @Override
     public void onCreate() {
@@ -34,7 +32,7 @@ public class AppController extends Application {
         playersPointList = new ArrayList<>();
         winningHashMap = new HashMap<>();
         discardingHashMap = new HashMap<>();
-        NumOfDepositBar = 0;
+        numOfDepositBar = 0;
 
         setIsPlayers();
     }
@@ -66,6 +64,7 @@ public class AppController extends Application {
 
     /**
      * 現在の半荘数を返します。
+     *
      * @return 半荘数
      */
     public int getGameCnt() {
@@ -74,6 +73,7 @@ public class AppController extends Application {
 
     /**
      * 半荘数をセットします。
+     *
      * @param gameCnt 半荘数
      */
     public void setGameCnt(int gameCnt) {
@@ -82,6 +82,7 @@ public class AppController extends Application {
 
     /**
      * プレイヤー群を取得。
+     *
      * @return プレイヤー群
      */
     public ArrayList<Player> getPlayers() {
@@ -90,6 +91,7 @@ public class AppController extends Application {
 
     /**
      * プレイヤー群をセット。
+     *
      * @param players プレイヤー群
      */
     public void setPlayers(ArrayList<Player> players) {
@@ -98,6 +100,7 @@ public class AppController extends Application {
 
     /**
      * プレイヤー群の夫々の得点群を取得します。
+     *
      * @return プレイヤー群の夫々の得点群
      */
     public List<HashMap<Integer, Integer>> getPlayersPointList() {
@@ -106,6 +109,7 @@ public class AppController extends Application {
 
     /**
      * プレイヤー群の夫々の得点群をセットします。
+     *
      * @param playersPointList プレイヤー群の夫々の得点群
      */
     public void setPlayersPointList(List<HashMap<Integer, Integer>> playersPointList) {
@@ -114,6 +118,7 @@ public class AppController extends Application {
 
     /**
      * プレイヤー群の夫々の得点をリストに追加します。
+     *
      * @param playersPoint プレイヤー群の夫々の得点
      */
     public void addPlayersPoint(HashMap<Integer, Integer> playersPoint) {
@@ -122,32 +127,54 @@ public class AppController extends Application {
 
     /**
      * 供託棒の数を取得します。
+     *
      * @return 供託棒数
      */
     public int getNumOfDepositBar() {
-        return NumOfDepositBar;
+        return numOfDepositBar;
     }
 
     /**
      * 供託棒の数をセットします。
+     *
      * @param numOfDepositBar 供託棒数
      */
     public void setNumOfDepositBar(int numOfDepositBar) {
-        NumOfDepositBar = numOfDepositBar;
+        this.numOfDepositBar = numOfDepositBar;
     }
 
+    /**
+     * 試合中の和了数を取得します。
+     *
+     * @return プレイヤーの和了数
+     */
     public HashMap<Integer, Integer> getWinningHashMap() {
         return winningHashMap;
     }
 
+    /**
+     * 試合中の和了数をセットします。
+     *
+     * @param winningHashMap プレイヤーの和了数
+     */
     public void setWinningHashMap(HashMap<Integer, Integer> winningHashMap) {
         this.winningHashMap = winningHashMap;
     }
 
+    /**
+     * 試合中の放銃数を取得します。
+     *
+     * @return プレイヤーの放銃数
+     */
     public HashMap<Integer, Integer> getDiscardingHashMap() {
         return discardingHashMap;
     }
 
+    /**
+     * 試合中の放銃数をセットします。
+     *
+     * @param discardingHashMap プレイヤーの放銃数
+     */
     public void setDiscardingHashMap(HashMap<Integer, Integer> discardingHashMap) {
         this.discardingHashMap = discardingHashMap;
     }

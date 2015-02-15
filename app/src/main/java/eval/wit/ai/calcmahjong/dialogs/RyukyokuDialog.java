@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class RyukyokuDialog {
         this.activity = activity;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layout = inflater.inflate(R.layout.activity_ryukyoku_dialog,
+        layout = inflater.inflate(R.layout.ryukyoku_dialog,
                 (ViewGroup) activity.findViewById(R.id.ryukyoku_dialog_layout));
 
         // 参加プレイヤーを取得

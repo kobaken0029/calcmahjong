@@ -19,7 +19,6 @@ public class NumberPickerDialog {
     /**
      * NumberPickerのダイアログを表示する。
      * @param context コンテキスト
-     * @param view view
      * @param numberPicker numberPicker
      * @param minValue 最小値
      * @param maxValue 最大値

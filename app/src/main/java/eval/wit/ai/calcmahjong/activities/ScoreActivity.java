@@ -1,15 +1,20 @@
 package eval.wit.ai.calcmahjong.activities;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -207,10 +212,10 @@ public class ScoreActivity extends ActionBarActivity {
         p2Txt.setOnClickListener(callListener);
         p3Txt.setOnClickListener(callListener);
         p4Txt.setOnClickListener(callListener);
-//        p1ScoreTxt.setOnClickListener(callListener);
-//        p2ScoreTxt.setOnClickListener(callListener);
-//        p3ScoreTxt.setOnClickListener(callListener);
-//        p4ScoreTxt.setOnClickListener(callListener);
+        p1ScoreTxt.setOnClickListener(playerScoreListener(players.get(0).getId()));
+        p2ScoreTxt.setOnClickListener(playerScoreListener(players.get(1).getId()));
+        p3ScoreTxt.setOnClickListener(playerScoreListener(players.get(2).getId()));
+        p4ScoreTxt.setOnClickListener(playerScoreListener(players.get(3).getId()));
 
         setPlayersScore();
     }
@@ -266,7 +271,7 @@ public class ScoreActivity extends ActionBarActivity {
     }
 
     /**
-     * プレイヤー名を押下した際のListener。
+     * プレイヤー名を押下した際のリスナー。
      */
     private View.OnClickListener callListener = new View.OnClickListener() {
         @Override
@@ -325,6 +330,44 @@ public class ScoreActivity extends ActionBarActivity {
                     appController.setNumOfDepositBar(appController.getNumOfDepositBar() + 1);
                 }
                 setPlayersScore();
+            }
+        };
+    }
+
+    /**
+     * スコアを押下した際のリスナー。
+     * @param id プレイヤーID
+     */
+    private View.OnClickListener playerScoreListener(final int id) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View layout = inflater.inflate(R.layout.fix_player_score_dialog, null);
+
+                final TextView playerScoreText = (TextView) v;
+                final EditText scoreEditText = (EditText) layout.findViewById(R.id.p_score);
+                scoreEditText.setText(playerScoreText.getText().toString());
+
+                new AlertDialog.Builder(ScoreActivity.this)
+                        .setTitle("点数修正")
+                        .setView(layout)
+                        .setPositiveButton(getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        playerScoreText.setText(scoreEditText.getText().toString());
+                                        playersPoint.put(id, Integer.valueOf(scoreEditText.getText().toString()));
+                                    }
+                                })
+                        .setNegativeButton(getResources().getString(R.string.cancel),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .create().show();
             }
         };
     }

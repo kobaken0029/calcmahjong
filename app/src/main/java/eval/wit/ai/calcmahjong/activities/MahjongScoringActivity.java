@@ -215,12 +215,13 @@ public class MahjongScoringActivity extends ActionBarActivity {
                     loser == null,
                     honba);
 
-            String msg = "アガリ:" + winner.getName() + "\n"
-                    + "放銃者:" + (loser == null ? "自摸和了" : loser.getName()) + "\n"
-                    + "飜数" + numberOfHanSpinner.getSelectedItem().toString() + "\n"
-                    + "符数" + numberOfFuSpinner.getSelectedItem().toString() + "\n"
+            String msg = "アガリ: " + winner.getName() + "\n"
+                    + (loser == null ? "自摸和了" : "放銃者: " + loser.getName()) + "\n"
+                    + "飜数: " + numberOfHanSpinner.getSelectedItem().toString() + "\n"
+                    + "符数: " + numberOfFuSpinner.getSelectedItem().toString() + "\n"
                     + honba + "本場" + "\n"
-                    + "得点" + point[0];
+                    + "得点: " + point[0] + "\n"
+                    + "親: " + parent.getName();
             UiUtil.showDialog(MahjongScoringActivity.this, msg, listener);
         }
     };
@@ -237,6 +238,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
             intent.putExtra("winner", winner);
             intent.putExtra("parent", parent);
 
+            // 和了数をカウント
             countWinning();
 
             if (loser != null) {

@@ -262,6 +262,7 @@ public class ResultActivity extends ActionBarActivity {
                                     break;
                             }
 
+                            // 成績をつける
                             if (record != null) {
                                 record.setTotalScore(score);
                                 record.setWinning(record.getWinning() + appController.getWinningHashMap().get(p.getId()));

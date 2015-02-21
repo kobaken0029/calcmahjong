@@ -38,12 +38,13 @@ public class SeatingListDialogActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seating_list);
 
+        HashMap<Integer, Integer> winnerHashMap = new HashMap<>();
+        HashMap<Integer, Integer> discardingHashMap = new HashMap<>();
+
+        // ドラッグ・アンド・ドロップ可能なListViewを取得
         TouchListView tlv = (TouchListView) getListView();
         appController = (AppController) getApplication();
         players = appController.getPlayers();
-
-        HashMap<Integer, Integer> winnerHashMap = new HashMap<>();
-        HashMap<Integer, Integer> discardingHashMap = new HashMap<>();
 
         for (Player p : players) {
             array.add(p.getName());

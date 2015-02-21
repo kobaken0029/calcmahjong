@@ -15,13 +15,23 @@ import eval.wit.ai.calcmahjong.models.entities.Player;
  */
 public class AppController extends Application {
     private DatabaseAdapter dbAdapter;
+
+    /** 試合参加プレイヤー  */
     private ArrayList<Player> players;
 
+    /** 試合数カウント用 */
     private int gameCnt;
+
+    /** 試合中の各プレイヤーの得点リスト */
     private List<HashMap<Integer, Integer>> playersPointList;
+
+    /** 和了者<プレイヤーID, 和了数> */
     private HashMap<Integer, Integer> winningHashMap;
+
+    /** 放銃者<プレイヤーID, 放銃数> */
     private HashMap<Integer, Integer> discardingHashMap;
 
+    /** 供託棒数 */
     private int numOfDepositBar;
 
     @Override

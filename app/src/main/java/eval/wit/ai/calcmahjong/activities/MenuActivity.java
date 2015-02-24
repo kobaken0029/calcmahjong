@@ -46,6 +46,7 @@ public class MenuActivity extends ActionBarActivity {
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, SettingsActivity.class));
             }
         });
     }

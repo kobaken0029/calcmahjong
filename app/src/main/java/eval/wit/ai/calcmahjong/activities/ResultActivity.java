@@ -23,6 +23,7 @@ import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.db.DatabaseAdapter;
 import eval.wit.ai.calcmahjong.models.entities.Player;
 import eval.wit.ai.calcmahjong.models.entities.Record;
+import eval.wit.ai.calcmahjong.resources.Consts;
 import eval.wit.ai.calcmahjong.resources.ConstsManager;
 import eval.wit.ai.calcmahjong.utilities.UiUtil;
 
@@ -95,11 +96,6 @@ public class ResultActivity extends ActionBarActivity {
      * 現在のスコアを表にセット。
      */
     private void setScoreView() {
-//        int player1TotalScore = 0;
-//        int player2TotalScore = 0;
-//        int player3TotalScore = 0;
-//        int player4TotalScore = 0;
-
         String player1ScoreTxtResId;
         String player2ScoreTxtResId;
         String player3ScoreTxtResId;
@@ -159,29 +155,51 @@ public class ResultActivity extends ActionBarActivity {
 
         // プレイヤーの持ち点からスコアを算出
         for (Player p : players) {
-            Log.d("HASH_BEFORE", playersPoint.get(p.getId()).toString());
+            Log.d("SCORE_BEFORE", p.getName() + " " + playersPoint.get(p.getId()).toString());
             playersPoint.put(p.getId(), (playersPoint.get(p.getId()) - 30000) / 1000);
-            Log.d("HASH_AFTER", playersPoint.get(p.getId()).toString());
+            Log.d("SCORE_AFTER", p.getName() + " " + playersPoint.get(p.getId()).toString());
         }
 
-        // トップを探す
-        double buf = playersPoint.get(players.get(0).getId());
+        // 順位を決定する
+        // プレイヤーの順位<プレイヤーID， 順位>
+        HashMap<Integer, Integer> playersRankingHashMap = new HashMap<>();
         int topId = players.get(0).getId();
         for (Player p : players) {
-            if (buf < playersPoint.get(p.getId())) {
-                buf = playersPoint.get(p.getId());
+
+            int ranking = 1;
+            for (Player exp : players) {
+                // 現在のプレイヤー以外の場合
+                if (exp.getId() != p.getId()) {
+                    if (playersPoint.get(p.getId()) < playersPoint.get(exp.getId())) {
+                        ranking++;
+                    }
+                }
+            }
+
+            if (playersRankingHashMap.containsValue(ranking)) {
+                ranking++;
+            }
+            playersRankingHashMap.put(p.getId(), ranking);
+
+            // トップを探す
+            if (ranking == Consts.TOP) {
                 topId = p.getId();
             }
+            Log.d("RANKING", p.getName() + " " + playersRankingHashMap.get(p.getId()) + "位");
         }
 
+
         // トップの得点にオカを反映させる
-        int oka = 0;
-        for (Player p : players) {
-            if (p.getId() != topId) {
-                oka += Math.abs(playersPoint.get(p.getId()));
-            }
-        }
+        int oka = Consts.OKA_25000_30000;
         playersPoint.put(topId, playersPoint.get(topId) + oka);
+
+
+        // 順位ウマを反映させる
+        for (Player p : players) {
+            playersPoint.put(p.getId(),
+                    playersPoint.get(p.getId()) + ConstsManager.getUma(playersRankingHashMap.get(p.getId())));
+        }
+
 
         // 得点リストに追加
         playersPointList.add(playersPoint);
@@ -270,7 +288,8 @@ public class ResultActivity extends ActionBarActivity {
                             }
 
                             // 成績を更新
-                            adapter.updateRecord(record, getRanking(i));
+                            Log.d("FINAL_RESULT_RANKING", p.getName() + " " + getFinalResultRanking(i) + "位");
+                            adapter.updateRecord(record, getFinalResultRanking(i));
                             i++;
                         }
                         adapter.close();
@@ -281,11 +300,11 @@ public class ResultActivity extends ActionBarActivity {
     }
 
     /**
-     * プレイヤーの順位を取得。
+     * 最終的なプレイヤーの順位を取得。
      * @param numOfSeat プレイヤーの席
      * @return 順位
      */
-    private int getRanking(int numOfSeat) {
+    private int getFinalResultRanking(int numOfSeat) {
         int ranking = 1;
 
         double buf = playerTotalScore[numOfSeat];

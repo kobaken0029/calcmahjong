@@ -1,5 +1,9 @@
 package eval.wit.ai.calcmahjong.resources;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by koba on 2015/01/26.
  */
@@ -16,6 +20,12 @@ public class Consts {
     public final static int MAX_NUMBER_OF_HONBA = 7;
     public final static int MIN_NUMBER_OF_HONBA = 0;
 
+    /** 順位 */
+    public final static int TOP = 1;
+    public final static int SECONDE = 2;
+    public final static int THIRD = 3;
+    public final static int LAST = 4;
+
     /** 聴牌情報 */
     public final static int TENPAI_ONE = 1;
     public final static int TENPAI_TWO = 2;
@@ -30,6 +40,20 @@ public class Consts {
 
     /** 遅延時間 */
     public final static int DELAY_TIME = 3000;
+
+    /** 順位ウマ */
+    public final static String GOTTO = "ゴットー";
+    public final static String ONE_TWO = "ワンツー";
+    public final static String ONE_THREE = "ワンスリー";
+    public final static String TWO_THREE = "ツースリー";
+    public final static int[] GOTTO_POINT = {5, 10};
+    public final static int[] ONE_TWO_POINT = {10, 20};
+    public final static int[] ONE_THREE_POINT = {10, 30};
+    public final static int[] TWO_THREE_POINT = {20, 30};
+
+    /** オカ */
+    public final static int OKA_NONE = 0;
+    public final static int OKA_25000_30000 = 20;
 
     /** 飜数 */
     public final static String I_HAN = "1翻";

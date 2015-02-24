@@ -73,6 +73,32 @@ public class ConstsManager {
     }
 
     /**
+     * 順位に応じてウマを取得します。
+     * @param ranking 順位
+     * @return ウマ
+     */
+    public static int getUma(int ranking) {
+        int uma = 0;
+        switch (ranking) {
+            case 1:
+                uma += Consts.GOTTO_POINT[1];
+                break;
+            case 2:
+                uma += Consts.GOTTO_POINT[0];
+                break;
+            case 3:
+                uma -= Consts.GOTTO_POINT[0];
+                break;
+            case 4:
+                uma -= Consts.GOTTO_POINT[1];
+                break;
+            default:
+                break;
+        }
+        return uma;
+    }
+
+    /**
      * 符数と飜数から得点を返します。
      *
      * @param fu  符

@@ -98,6 +98,7 @@ public class ScoreActivity extends ActionBarActivity {
 
         switch (requestCode) {
             case Consts.REQUEST_CODE:
+                // 誰かが挙がった場合
                 if (resultCode == RESULT_OK) {
                     int[] point = data.getIntArrayExtra("point");
                     Player winner = (Player) data.getSerializableExtra("winner");
@@ -149,6 +150,7 @@ public class ScoreActivity extends ActionBarActivity {
                                 i++;
                             }
 
+                            // 子が挙がった場合のために得点インデックスを調整
                             if (i == 3) {
                                 i = 0;
                             }

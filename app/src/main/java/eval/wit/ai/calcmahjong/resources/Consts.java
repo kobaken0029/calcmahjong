@@ -59,11 +59,11 @@ public class Consts {
     public final static int OKA_30000_30000 = 0;
 
     /** 配給原点 */
-    public final static int DO_20000 = 20000;
-    public final static int DO_25000 = 25000;
-    public final static int DO_26000 = 26000;
-    public final static int DO_27000 = 27000;
-    public final static int DO_30000 = 30000;
+    public final static String DO_20000 = "20000";
+    public final static String DO_25000 = "25000";
+    public final static String DO_26000 = "26000";
+    public final static String DO_27000 = "27000";
+    public final static String DO_30000 = "30000";
 
     /** 飜数 */
     public final static String I_HAN = "1翻";

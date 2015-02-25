@@ -71,9 +71,8 @@ public class ConstsManager {
      * @return 最初の持ち点
      */
     public static int getFirstScore(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String point = prefs.getString("distribution_origin_point_list", "25000");
-        return Integer.parseInt(point);
+        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("distribution_origin_point_list", "25000"));
     }
 
     /**
@@ -84,8 +83,8 @@ public class ConstsManager {
      */
     public static int getOka(Context context) {
         int oka = 0;
-        switch (Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
-                .getString("distribution_origin_point_list", "25000"))) {
+        switch (PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("distribution_origin_point_list", "25000")) {
             case Consts.DO_20000:
                 oka = Consts.OKA_20000_30000;
                 break;

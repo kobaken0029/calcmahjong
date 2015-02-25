@@ -52,8 +52,18 @@ public class Consts {
     public final static int[] TWO_THREE_POINT = {20, 30};
 
     /** オカ */
-    public final static int OKA_NONE = 0;
+    public final static int OKA_20000_30000 = 40;
     public final static int OKA_25000_30000 = 20;
+    public final static int OKA_26000_30000 = 16;
+    public final static int OKA_27000_30000 = 12;
+    public final static int OKA_30000_30000 = 0;
+
+    /** 配給原点 */
+    public final static int DO_20000 = 20000;
+    public final static int DO_25000 = 25000;
+    public final static int DO_26000 = 26000;
+    public final static int DO_27000 = 27000;
+    public final static int DO_30000 = 30000;
 
     /** 飜数 */
     public final static String I_HAN = "1翻";

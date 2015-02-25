@@ -183,7 +183,7 @@ public class ScoreActivity extends ActionBarActivity {
         playersPoint = new HashMap<>();
         isCallPlayers = new HashMap<>();
         players = ((AppController) getApplication()).getPlayers();
-        Integer firstScore = ConstsManager.getFirstScore();
+        Integer firstScore = ConstsManager.getFirstScore(getApplicationContext());
 
         playersPoint.put(players.get(0).getId(), firstScore);
         playersPoint.put(players.get(1).getId(), firstScore);

@@ -188,16 +188,14 @@ public class ResultActivity extends ActionBarActivity {
             Log.d("RANKING", p.getName() + " " + playersRankingHashMap.get(p.getId()) + "位");
         }
 
-
         // トップの得点にオカを反映させる
-        int oka = Consts.OKA_25000_30000;
-        playersPoint.put(topId, playersPoint.get(topId) + oka);
-
+        playersPoint.put(topId, playersPoint.get(topId) + ConstsManager.getOka(getApplicationContext()));
 
         // 順位ウマを反映させる
         for (Player p : players) {
             playersPoint.put(p.getId(),
-                    playersPoint.get(p.getId()) + ConstsManager.getUma(playersRankingHashMap.get(p.getId())));
+                    playersPoint.get(p.getId())
+                            + ConstsManager.getUma(getApplicationContext(), playersRankingHashMap.get(p.getId())));
         }
 
 

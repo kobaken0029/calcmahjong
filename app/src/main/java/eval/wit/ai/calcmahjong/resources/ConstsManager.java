@@ -1,6 +1,8 @@
 package eval.wit.ai.calcmahjong.resources;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.ArrayAdapter;
 
 import eval.wit.ai.calcmahjong.R;
@@ -68,34 +70,84 @@ public class ConstsManager {
      *
      * @return 最初の持ち点
      */
-    public static int getFirstScore() {
-        return Consts.SCORE_25000;
+    public static int getFirstScore(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String point = prefs.getString("distribution_origin_point_list", "25000");
+        return Integer.parseInt(point);
     }
 
     /**
-     * 順位に応じてウマを取得します。
+     * オカを取得します。
+     *
+     * @param context コンテキスト
+     * @return オカ
+     */
+    public static int getOka(Context context) {
+        int oka = 0;
+        switch (Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("distribution_origin_point_list", "25000"))) {
+            case Consts.DO_20000:
+                oka = Consts.OKA_20000_30000;
+                break;
+            case Consts.DO_25000:
+                oka = Consts.OKA_25000_30000;
+                break;
+            case Consts.DO_26000:
+                oka = Consts.OKA_26000_30000;
+                break;
+            case Consts.DO_27000:
+                oka = Consts.OKA_27000_30000;
+                break;
+            case Consts.DO_30000:
+                oka = Consts.OKA_30000_30000;
+                break;
+        }
+        return oka;
+    }
+
+    /**
+     * 順位ウマを取得します。
+     *
+     * @param context コンテキスト
      * @param ranking 順位
      * @return ウマ
      */
-    public static int getUma(int ranking) {
-        int uma = 0;
+    public static int getUma(Context context, int ranking) {
+        int[] bufOfUma = new int[2];
+        switch (PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("ranking_uma_list", "ゴットー")) {
+            case Consts.GOTTO:
+                bufOfUma = Consts.GOTTO_POINT;
+                break;
+            case Consts.ONE_TWO:
+                bufOfUma = Consts.ONE_TWO_POINT;
+                break;
+            case Consts.ONE_THREE:
+                bufOfUma = Consts.ONE_THREE_POINT;
+                break;
+            case Consts.TWO_THREE:
+                bufOfUma = Consts.TWO_THREE_POINT;
+                break;
+        }
+
+        int rankingUma = 0;
         switch (ranking) {
             case 1:
-                uma += Consts.GOTTO_POINT[1];
+                rankingUma += bufOfUma[1];
                 break;
             case 2:
-                uma += Consts.GOTTO_POINT[0];
+                rankingUma += bufOfUma[0];
                 break;
             case 3:
-                uma -= Consts.GOTTO_POINT[0];
+                rankingUma -= bufOfUma[0];
                 break;
             case 4:
-                uma -= Consts.GOTTO_POINT[1];
+                rankingUma -= bufOfUma[1];
                 break;
             default:
                 break;
         }
-        return uma;
+        return rankingUma;
     }
 
     /**

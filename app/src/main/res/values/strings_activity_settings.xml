@@ -6,24 +6,41 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
+    <!--<string name="pref_title_social_recommendations">Enable social recommendations</string>-->
+    <!--<string name="pref_description_social_recommendations">Recommendations for people to contact-->
+        <!--based on your message history-->
+    <!--</string>-->
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
+    <!--<string name="pref_title_display_name">Display name</string>-->
+    <!--<string name="pref_default_display_name">John Smith</string>-->
+    <string name="distribution_origin_point_messages">配給原点(原点30000点)</string>
+    <string-array name="distribution_origin_point_title">
+        <item>20000点持ち</item>
+        <item>25000点持ち</item>
+        <item>26000点持ち</item>
+        <item>27000点持ち</item>
+        <item>30000点持ち</item>
+    </string-array>
+    <string-array name="distribution_origin_point_value">
+        <item>20000</item>
+        <item>25000</item>
+        <item>26000</item>
+        <item>27000</item>
+        <item>30000</item>
+    </string-array>
 
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string name="pref_title_add_friends_to_messages">順位ウマ</string>
     <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
+        <item>5-10(ゴットー)</item>
+        <item>10-20(ワンツー)</item>
+        <item>10-30(ワンスリー)</item>
+        <item>20-30(ツースリー)</item>
     </string-array>
     <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
+        <item>ゴットー</item>
+        <item>ワンツー</item>
+        <item>ワンスリー</item>
+        <item>ツースリー</item>
     </string-array>
 
     <!-- Example settings for Data & Sync -->
@@ -50,9 +67,9 @@
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_mode_selection">モード選択</string>
 
-    <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_sanma_mode">三麻モード</string>
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>

@@ -1,9 +1,5 @@
 package eval.wit.ai.calcmahjong.resources;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by koba on 2015/01/26.
  */

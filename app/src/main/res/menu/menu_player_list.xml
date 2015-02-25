@@ -7,4 +7,9 @@
         android:title="@string/player_registration"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/settings"
+        android:title="@string/setting"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

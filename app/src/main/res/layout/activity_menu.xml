@@ -68,22 +68,22 @@
                 android:layout_gravity="center_horizontal" />
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+        <!--<LinearLayout-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1">-->
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/setting"
-                android:textColor="#FFFFFFFF"
-                android:id="@+id/settings"
-                android:background="@drawable/tab"
-                android:layout_gravity="center|bottom"
-                android:paddingRight="100dp"
-                android:paddingLeft="100dp" />
-        </LinearLayout>
+            <!--<Button-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="@string/setting"-->
+                <!--android:textColor="#FFFFFFFF"-->
+                <!--android:id="@+id/settings"-->
+                <!--android:background="@drawable/tab"-->
+                <!--android:layout_gravity="center|bottom"-->
+                <!--android:paddingRight="100dp"-->
+                <!--android:paddingLeft="100dp" />-->
+        <!--</LinearLayout>-->
     </LinearLayout>
 </RelativeLayout>

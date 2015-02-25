@@ -42,13 +42,13 @@ public class MenuActivity extends ActionBarActivity {
             }
         });
 
-        Button settingsBtn = (Button) findViewById(R.id.settings);
-        settingsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, SettingsActivity.class));
-            }
-        });
+//        Button settingsBtn = (Button) findViewById(R.id.settings);
+//        settingsBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MenuActivity.this, SettingsActivity.class));
+//            }
+//        });
     }
 
 
@@ -67,7 +67,8 @@ public class MenuActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.settings) {
+            startActivity(new Intent(MenuActivity.this, SettingsActivity.class));
             return true;
         }
 

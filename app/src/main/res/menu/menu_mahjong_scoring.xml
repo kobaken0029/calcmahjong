@@ -2,9 +2,4 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="eval.wit.ai.calcmahjong.activities.MahjongScoringActivity">
-    <item
-        android:id="@+id/ryukyoku"
-        android:title="@string/ryukyoku"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
 </menu>

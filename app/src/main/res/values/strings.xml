@@ -11,7 +11,7 @@
 
     <!-- 点数表示 -->
     <string name="title_activity_score">点数表示</string>
-    <string name="win">アガリ</string>
+    <string name="win">和了</string>
     <string name="half_game_set_message">半荘を終了してもよいですか?</string>
     <string name="really_half_game_set_message">現在の半荘の成績は反映されません\n本当に終了しますか?</string>
     <string name="call_message">立直しますか?</string>

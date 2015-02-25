@@ -1,7 +1,6 @@
 package eval.wit.ai.calcmahjong.resources;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.ArrayAdapter;
 

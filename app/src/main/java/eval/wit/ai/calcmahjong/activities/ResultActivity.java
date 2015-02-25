@@ -173,12 +173,13 @@ public class ResultActivity extends ActionBarActivity {
                     if (playersPoint.get(p.getId()) < playersPoint.get(exp.getId())) {
                         ranking++;
                     }
+
+                    if (playersRankingHashMap.containsValue(ranking)) {
+                        ranking++;
+                    }
                 }
             }
 
-            if (playersRankingHashMap.containsValue(ranking)) {
-                ranking++;
-            }
             playersRankingHashMap.put(p.getId(), ranking);
 
             // トップを探す

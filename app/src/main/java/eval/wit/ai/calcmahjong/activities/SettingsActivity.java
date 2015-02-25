@@ -82,7 +82,7 @@ public class SettingsActivity extends PreferenceActivity {
         // to reflect the new value, per the Android Design guidelines.
         bindPreferenceSummaryToValue(findPreference("distribution_origin_point_list"));
         bindPreferenceSummaryToValue(findPreference("ranking_uma_list"));
-        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+//        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
 //        bindPreferenceSummaryToValue(findPreference("sync_frequency"));
     }
 

@@ -77,6 +77,7 @@
     <string name="south">南</string>
     <string name="west">西</string>
     <string name="north">北</string>
+    <string name="already_processing_message">既に処理済みです</string>
     <string name="title_activity_ryukyoku_dialog">RyukyokuDialogActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

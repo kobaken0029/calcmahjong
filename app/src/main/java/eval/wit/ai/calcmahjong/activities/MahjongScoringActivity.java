@@ -50,6 +50,9 @@ public class MahjongScoringActivity extends ActionBarActivity {
 
     private MediaPlayer mp;
 
+    private boolean isClicked;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -232,6 +235,13 @@ public class MahjongScoringActivity extends ActionBarActivity {
     DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(final DialogInterface dialog, int which) {
+            if (isClicked) {
+                UiUtil.showToast(MahjongScoringActivity.this,
+                        getResources().getString(R.string.already_processing_message));
+                return;
+            }
+
+            isClicked = true;
             String uri = Consts.TUMO_VOICE_URL;
             Intent intent = new Intent();
             intent.putExtra("point", point);

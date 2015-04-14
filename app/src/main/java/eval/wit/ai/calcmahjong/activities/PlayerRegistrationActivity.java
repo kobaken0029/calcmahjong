@@ -3,11 +3,16 @@ package eval.wit.ai.calcmahjong.activities;
 import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.gc.materialdesign.views.ButtonRectangle;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import eval.wit.ai.calcmahjong.R;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
@@ -17,30 +22,31 @@ import eval.wit.ai.calcmahjong.utilities.UiUtil;
 public class PlayerRegistrationActivity extends ActionBarActivity {
     private EditText nameTxt;
     private EditText messageTxt;
-    private Button registrationBtn;
 
     private DatabaseAdapter databaseAdapter;
-    private AppController appController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_registration);
-        appController = (AppController) getApplication();
-        databaseAdapter = appController.getDbAdapter();
+        databaseAdapter = ((AppController) getApplication()).getDbAdapter();
 
-        findView();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_player_registration);
+        toolbar.setTitle(getResources().getString(R.string.title_activity_player_registration));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.action_bar));
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        registrationBtn.setOnClickListener(registrationListener);
-    }
-
-    /**
-     * リソースを紐付ける。
-     */
-    private void findView() {
         nameTxt = (EditText) findViewById(R.id.nameTxt);
         messageTxt = (EditText) findViewById(R.id.messageTxt);
-        registrationBtn = (Button) findViewById(R.id.registrationBtn);
+        findViewById(R.id.registrationBtn).setOnClickListener(registrationListener);
+
+        // 広告バナーを表示
+        ((AdView)this.findViewById(R.id.adView_player_registration)).loadAd(new AdRequest.Builder()
+                .addTestDevice("21499EE04196C2E0E48CB407366D501F")
+                .build());
     }
 
     /**
@@ -58,7 +64,7 @@ public class PlayerRegistrationActivity extends ActionBarActivity {
             }
 
             // 入力文字数制限
-            if (nameTxt.getText().toString().length() > 4) {
+            if (nameTxt.getText().toString().length() > 3) {
                 UiUtil.showToast(PlayerRegistrationActivity.this,
                         getResources().getString(R.string.number_of_name_over_message));
                 return;

@@ -229,7 +229,7 @@ public class DatabaseAdapter {
      * 成績を更新します。
      * @param record 成績
      */
-    public void updateRecord(Record record, int ranking) {
+    public void updateRecord(Record record) {
         Date dateNow = new Date();
         ContentValues values = new ContentValues();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -240,25 +240,8 @@ public class DatabaseAdapter {
         int third = record.getThird();
         int last = record.getLast();
 
-        switch (ranking) {
-            case 1:
-                top++;
-                break;
-            case 2:
-                second++;
-                break;
-            case 3:
-                third++;
-                break;
-            case 4:
-                last++;
-                break;
-            default:
-                break;
-        }
-
         values.put(COL_SCORE, record.getTotalScore());
-        values.put(COL_NUM_OF_PLAY, record.getTotalPlay() + 1);
+        values.put(COL_NUM_OF_PLAY, record.getTotalPlay());
         values.put(COL_TOP, top);
         values.put(COL_SECOND, second);
         values.put(COL_THIRD, third);
@@ -279,14 +262,13 @@ public class DatabaseAdapter {
     }
 
     /**
-     * 指定IDの成績を削除します。
-     * @param id 成績ID
+     * 指定プレイヤーIDの成績を削除します。
+     * @param playerId プレイヤーID
      * @return 成否
      */
-    public boolean deleteRecord(int id) {
-        return db.delete(RECORD_TABLE_NAME, COL_ID + "=" + id, null) > 0;
+    public boolean deleteRecord(int playerId) {
+        return db.delete(RECORD_TABLE_NAME, COL_PLAYER_ID + "=" + playerId, null) > 0;
     }
-
 
     /**
      * DBのヘルパークラスです。

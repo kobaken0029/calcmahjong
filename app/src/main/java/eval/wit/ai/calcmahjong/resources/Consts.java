@@ -12,13 +12,12 @@ public class Consts {
     public final static int REQUEST_CODE = 200;
     public final static int RYUKYOKU_CODE = 300;
 
-    /** 最大・最小本場数 */
-    public final static int MAX_NUMBER_OF_HONBA = 7;
-    public final static int MIN_NUMBER_OF_HONBA = 0;
+    /** インタースティシャル広告ID */
+    public final static String AD_UNIT_ID = "ca-app-pub-7932059771308904/6217972472";
 
     /** 順位 */
     public final static int TOP = 1;
-    public final static int SECONDE = 2;
+    public final static int SECOND = 2;
     public final static int THIRD = 3;
     public final static int LAST = 4;
 
@@ -26,6 +25,16 @@ public class Consts {
     public final static int TENPAI_ONE = 1;
     public final static int TENPAI_TWO = 2;
     public final static int TENPAI_THREE = 3;
+
+    /** Wikipedia項目名 */
+    public final static String MAHJONG_YAKU_LIST = "麻雀役一覧";
+    public final static String MAHJONG_POINT_LIST = "点数早見表";
+    public final static String MAHJONG_RULES = "麻雀のルール";
+
+    /** WikipediaURL */
+    public final static String MAHJONG_YAKU_LIST_URL = "http://ja.wikipedia.org/wiki/%E9%BA%BB%E9%9B%80%E3%81%AE%E5%BD%B9%E4%B8%80%E8%A6%A7#.E4.B8.80.E9.A3.9C";
+    public final static String MAHJONG_POINT_LIST_URL = "http://ja.wikipedia.org/wiki/%E9%BA%BB%E9%9B%80%E3%81%AE%E5%BE%97%E7%82%B9%E8%A8%88%E7%AE%97#.E7.82.B9.E6.95.B0.E3.81.AE.E6.97.A9.E8.A6.8B.E8.A1.A8";
+    public final static String MAHJONG_RULES_URL = "http://ja.wikipedia.org/wiki/%E9%BA%BB%E9%9B%80%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB";
 
     /** 音声URL */
     public final static String CALL_VOICE_1_URL = "http://www14.big.or.jp/~amiami/happy/download/voice/208_janken/ri-chi_01.wav";
@@ -55,11 +64,17 @@ public class Consts {
     public final static int OKA_30000_30000 = 0;
 
     /** 配給原点 */
-    public final static String DO_20000 = "20000";
-    public final static String DO_25000 = "25000";
-    public final static String DO_26000 = "26000";
-    public final static String DO_27000 = "27000";
-    public final static String DO_30000 = "30000";
+    public final static int DO_20000 = 20000;
+    public final static int DO_25000 = 25000;
+    public final static int DO_26000 = 26000;
+    public final static int DO_27000 = 27000;
+    public final static int DO_30000 = 30000;
+    public final static int DO_35000 = 35000;
+    public final static int DO_40000 = 40000;
+
+    /** 原点 */
+    public final static int O_30000 = 30000;
+    public final static int O_40000 = 40000;
 
     /** 飜数 */
     public final static String I_HAN = "1翻";
@@ -70,7 +85,7 @@ public class Consts {
     public final static String HANEMAN = "6~7翻";
     public final static String BAIMAN = "8~10翻";
     public final static String SAN_BAIMAN = "11~12翻";
-    public final static String YAKUMAN = "13翻";
+    public final static String YAKUMAN = "13翻以上";
     public final static String DOUBLE_YAKUMAN = "ダブル役満";
 
     /** 符数 */

@@ -2,6 +2,7 @@ package eval.wit.ai.calcmahjong.models.clients;
 
 import android.app.Application;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import eval.wit.ai.calcmahjong.models.db.DatabaseAdapter;
 import eval.wit.ai.calcmahjong.models.entities.Player;
+import eval.wit.ai.calcmahjong.resources.ConstsManager;
 
 /**
  * Created by koba on 2015/01/25.
@@ -33,6 +35,31 @@ public class AppController extends Application {
 
     /** 供託棒数 */
     private int numOfDepositBar;
+
+    /** 連荘数 */
+    private int numOfhonba;
+
+    /** 誰が親か */
+    private boolean[] isParent = new boolean[ConstsManager.getNumOfPlayer()];
+
+    /** 場 */
+    public enum Round {
+        EAST("東"),
+        SOUTH("南"),
+        WEST("西"),
+        NORTH("北");
+
+        private String wind;
+        private Round(String wind) {
+            setWind(wind);
+        }
+        public String getWind() {
+            return wind;
+        }
+        private void setWind(String wind) {
+            this.wind = wind;
+        }
+    }
 
     @Override
     public void onCreate() {
@@ -71,6 +98,136 @@ public class AppController extends Application {
         dbAdapter.close();
         setPlayers(ps);
     }
+
+    /**
+     * プレイヤーと順位が紐付いたHashMapを取得する。
+     *
+     * @param playersPoint プレイヤー毎の得点
+     * @return プレイヤー毎の順位
+     */
+    public HashMap<Integer, Integer> getRankingHashMap(HashMap<Integer, Integer> playersPoint) {
+        HashMap<Integer, Integer> playersRankingHashMap = new HashMap<>();
+        for (Player p : players) {
+
+            // ランキングをつける
+            playersRankingHashMap.put(p.getId(),
+                    getRanking(p.getId(), playersPoint, playersRankingHashMap));
+
+            Log.d("RANKING", p.getName() + " " + playersRankingHashMap.get(p.getId()) + "位");
+        }
+
+        return playersRankingHashMap;
+    }
+
+    /**
+     * ランキングを取得します。
+     *
+     * @param playerId プレイヤーID
+     * @param playersPoint プレイヤーのスコア
+     * @return 順位
+     */
+    private int getRanking(int playerId, HashMap<Integer, Integer> playersPoint,
+                          HashMap<Integer, Integer> playersRankingHashMap) {
+        int ranking = 1;
+
+        // 現在のプレイヤー以外のリストを生成
+        List<Player> exceptingPlayers = new ArrayList<>();
+        for (Player exp : players) {
+            if (exp.getId() != playerId) {
+                exceptingPlayers.add(exp);
+            }
+        }
+
+        // 順位を計算
+        double buf = playersPoint.get(playerId);
+        for (Player exp : exceptingPlayers) {
+            if (buf < playersPoint.get(exp.getId())) {
+                ranking++;
+            }
+        }
+
+        // 既にその順位のプレイヤーが存在していたら、順位を繰り上げる
+        while (playersRankingHashMap.containsValue(ranking)) {
+            ranking++;
+        }
+
+        return ranking;
+    }
+
+    /**
+     * 親を流す。
+     */
+    public void flowParent() {
+        int buf = 0;
+        for (int i = 0; i < this.isParent.length; i++) {
+            if (this.isParent[i]) {
+                buf = i + 1;
+                this.isParent[i] = false;
+            }
+        }
+
+        if (buf < isParent.length) {
+            this.isParent[buf] = true;
+        }
+    }
+
+    /**
+     * 半荘が終了したかを判定する。
+     *
+     * @return 半荘が終了したらtrue
+     */
+    public boolean isLastGame() {
+        boolean isFinish = true;
+
+        for (boolean buff : isParent) {
+            if (buff) {
+                isFinish = false;
+            }
+        }
+
+        return isFinish;
+    }
+
+    /**
+     * 局数を取得する。
+     *
+     * @return 局数
+     */
+    public int getNumOfHand() {
+        int numOfHand = 1;
+
+        for (int i = 0; i < isParent.length; i++) {
+            if (isParent[i]) {
+                numOfHand = i + 1;
+            }
+        }
+
+        return numOfHand;
+    }
+
+    /**
+     * 最終的なプレイヤーの順位を取得。
+     *
+     * @param numOfSeat プレイヤーの席
+     * @param playerTotalScore プレイヤーの合計スコア
+     * @return 順位
+     */
+//    public int getRanking(int numOfSeat, int[] playerTotalScore) {
+//        int ranking = 1;
+//
+//        double buf = playerTotalScore[numOfSeat];
+//        for (int i = 0; i < playerTotalScore.length; i++) {
+//            if (i == numOfSeat) {
+//                continue;
+//            }
+//
+//            if (buf < playerTotalScore[i]) {
+//                ranking++;
+//            }
+//        }
+//
+//        return ranking;
+//    }
 
     /**
      * 現在の半荘数を返します。
@@ -187,5 +344,31 @@ public class AppController extends Application {
      */
     public void setDiscardingHashMap(HashMap<Integer, Integer> discardingHashMap) {
         this.discardingHashMap = discardingHashMap;
+    }
+
+    /**
+     * 連荘数を取得します。
+     *
+     * @return 連荘数
+     */
+    public int getNumOfhonba() {
+        return numOfhonba;
+    }
+
+    /**
+     * 連荘数をセットします。
+     *
+     * @param numOfhonba 連荘数
+     */
+    public void setNumOfhonba(int numOfhonba) {
+        this.numOfhonba = numOfhonba;
+    }
+
+    public boolean[] getIsParent() {
+        return isParent;
+    }
+
+    public void setIsParent(boolean[] isParent) {
+        this.isParent = isParent;
     }
 }

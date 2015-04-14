@@ -32,6 +32,8 @@ public class RyukyokuDialog {
     private MediaPlayer mp;
     private Activity activity;
 
+    private AppController appController;
+
     /**
      * ダイアログを表示します。
      *
@@ -55,9 +57,12 @@ public class RyukyokuDialog {
         new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme))
                 .setTitle(context.getResources().getString(R.string.ryukyoku_title))
                 .setView(layout)
+                .setCancelable(false)
                 .setPositiveButton(context.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
+                        appController = ((AppController) activity.getApplication());
+
                         Intent intent = new Intent();
                         intent.putExtra("tenpai", getTenpaiPlayers(players));
                         activity.setResult(Consts.RYUKYOKU_CODE, intent);
@@ -91,6 +96,7 @@ public class RyukyokuDialog {
 
     /**
      * ダイアログを終了します。
+     *
      * @param dialog ダイアログ
      */
     private void finish(DialogInterface dialog) {
@@ -130,15 +136,36 @@ public class RyukyokuDialog {
      */
     private ArrayList<Player> getTenpaiPlayers(List<Player> players) {
         ArrayList<Player> tenpaiPlayers = new ArrayList<>();
+        boolean[] isParent = appController.getIsParent();
+        boolean isParentTenpai = false;
+        int cnt = 0;
+
         for (CheckBox c : checkBoxes) {
             if (c.isChecked()) {
                 for (Player p : players) {
                     if (p.getName().equals(c.getText().toString())) {
                         tenpaiPlayers.add(p);
+
+                        if (isParent[cnt]) {
+                            isParentTenpai = true;
+                        }
                     }
                 }
             }
+            cnt++;
         }
+
+        // 親がノーテンの場合
+        if (!isParentTenpai) {
+            appController.flowParent();
+        }
+
+        // 本場を増やす
+        appController.setNumOfhonba(appController.getNumOfhonba() + 1);
+        Log.d("HONBA", String.valueOf(appController.getNumOfhonba()));
+
+        isParent = appController.getIsParent();
+        Log.d("WHO_IS_PARENT", "" + isParent[0] + " " + isParent[1] + " " + isParent[2] + " " + isParent[3]);
 
         return tenpaiPlayers;
     }

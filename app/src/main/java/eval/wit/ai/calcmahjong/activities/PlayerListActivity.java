@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -21,6 +22,9 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +37,6 @@ import eval.wit.ai.calcmahjong.utilities.UiUtil;
 
 public class PlayerListActivity extends ActionBarActivity {
     private static final int MENU_ITEM_ID_DELETE = 1;
-
-    private ListView playerList;
-//    private Player player;
 
     private List<Player> players = new ArrayList<>();
     private CustomCheckAdapter checkAdapter;
@@ -50,22 +51,16 @@ public class PlayerListActivity extends ActionBarActivity {
         appController = (AppController) getApplication();
         dbAdapter = appController.getDbAdapter();
 
-
-//        dbAdapter.open();
-//        dbAdapter.daleteAllPlayers();
-//        dbAdapter.savePlayer("A君", "よろしく");
-//        dbAdapter.savePlayer("B君", "よろしく");
-//        dbAdapter.savePlayer("C君", "よろしく");
-//        dbAdapter.savePlayer("D君", "よろしく");
-//        dbAdapter.savePlayer("E君", "よろしく");
-//        dbAdapter.savePlayer("F君", "よろしく");
-//        dbAdapter.savePlayer("G君", "よろしく");
-//        dbAdapter.savePlayer("H君", "よろしく");
-//        dbAdapter.close();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_player_list);
+        toolbar.setTitle(getResources().getString(R.string.title_activity_player_list));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.action_bar));
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         checkAdapter = new CustomCheckAdapter();
-
-        playerList = (ListView) findViewById(R.id.player_list);
+        ListView playerList = (ListView) findViewById(R.id.player_list);
         playerList.setOnItemClickListener(onItemClickListener);
         playerList.setAdapter(checkAdapter);
         playerList.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -75,13 +70,28 @@ public class PlayerListActivity extends ActionBarActivity {
             }
         });
 
-//        loadPlayers();
+        // 広告バナーを表示
+        ((AdView) this.findViewById(R.id.adView_player_list)).loadAd(new AdRequest.Builder()
+                .addTestDevice("21499EE04196C2E0E48CB407366D501F")
+                .build());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         loadPlayers();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        dbAdapter.open();
+        for (Player p : players) {
+            dbAdapter.updatePlayer(p);
+            Log.d("PLAYER", p.getName() + ":" + String.valueOf(p.isPlay()));
+        }
+        dbAdapter.close();
     }
 
     /**
@@ -122,34 +132,34 @@ public class PlayerListActivity extends ActionBarActivity {
         }
     };
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode != KeyEvent.KEYCODE_BACK) {
-            return super.onKeyDown(keyCode, event);
-        } else {
-            ArrayList<Player> playToPlayers = new ArrayList<>();
-            for (Player p : players) {
-                if (p.isPlay()) {
-                    playToPlayers.add(p);
-                }
-            }
-
-            if (playToPlayers.size() != ConstsManager.getNumOfPlayer()) {
-                UiUtil.showDialog(PlayerListActivity.this, getResources().getString(R.string.number_of_player_error), null);
-            } else {
-                dbAdapter.open();
-                for (Player p : players) {
-                    dbAdapter.updatePlayer(p);
-                    Log.d("PLAYER", String.valueOf(p.isPlay()));
-                }
-                dbAdapter.close();
-
-                appController.setPlayers(playToPlayers);
-                finish();
-            }
-            return false;
-        }
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode != KeyEvent.KEYCODE_BACK) {
+//            return super.onKeyDown(keyCode, event);
+//        } else {
+//            ArrayList<Player> playToPlayers = new ArrayList<>();
+//            for (Player p : players) {
+//                if (p.isPlay()) {
+//                    playToPlayers.add(p);
+//                }
+//            }
+//
+//            if (playToPlayers.size() > ConstsManager.getNumOfPlayer()) {
+//                UiUtil.showDialog(PlayerListActivity.this, null, getResources().getString(R.string.number_of_player_error), null);
+//            } else {
+//                dbAdapter.open();
+//                for (Player p : players) {
+//                    dbAdapter.updatePlayer(p);
+//                    Log.d("PLAYER", p.getName() + ":" + String.valueOf(p.isPlay()));
+//                }
+//                dbAdapter.close();
+//
+//                appController.setPlayers(playToPlayers);
+//                finish();
+//            }
+//            return false;
+//        }
+//    }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -159,12 +169,13 @@ public class PlayerListActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             // プレイヤーを削除する
             case MENU_ITEM_ID_DELETE:
-                UiUtil.showDialog(PlayerListActivity.this, getResources().getString(R.string.delete_message),
+                UiUtil.showDialog(PlayerListActivity.this, null, getResources().getString(R.string.delete_message),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dbAdapter.open();
-                                if (dbAdapter.deletePlayer(deleteTargetPlayer.getId())) {
+                                if (dbAdapter.deletePlayer(deleteTargetPlayer.getId())
+                                        && dbAdapter.deleteRecord(deleteTargetPlayer.getId())) {
                                     UiUtil.showToast(PlayerListActivity.this, deleteTargetPlayer.getName() + "さんを削除しました");
                                     loadPlayers();
                                 }
@@ -244,6 +255,14 @@ public class PlayerListActivity extends ActionBarActivity {
                     @Override
                     public void onClick(View v) {
                         p.setPlay(!p.isPlay());
+
+                        ArrayList<Player> playToPlayers = new ArrayList<>();
+                        for (Player p : players) {
+                            if (p.isPlay()) {
+                                playToPlayers.add(p);
+                            }
+                        }
+                        appController.setPlayers(playToPlayers);
                     }
                 });
                 holder.checkBox.setChecked(p.isPlay());

@@ -4,23 +4,34 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import eval.wit.ai.calcmahjong.R;
+import eval.wit.ai.calcmahjong.models.adapter.SimpleDrawerAdapter;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.entities.Player;
 import eval.wit.ai.calcmahjong.resources.Consts;
@@ -33,37 +44,95 @@ public class ScoreActivity extends ActionBarActivity {
     private TextView p2ScoreTxt;
     private TextView p3ScoreTxt;
     private TextView p4ScoreTxt;
+    private TextView roundTextView;
+    private TextView numOfRoundTextView;
+    private TextView numOfDepositBarTextView;
+    private TextView numOfHonbaTextView;
+    private TextView topPlayerNameTextView;
+    private TextView secondPlayerNameTextView;
+    private TextView thirdPlayerNameTextView;
+    private TextView lastPlayerNameTextView;
+    private TextView gapTopBetweenSecondTextView;
+    private TextView gapTopBetweenThirdTextView;
+    private TextView gapTopBetweenLastTextView;
+
+    private ImageView p1CallBarImageView;
+    private ImageView p2CallBarImageView;
+    private ImageView p3CallBarImageView;
+    private ImageView p4CallBarImageView;
+
+    private FloatingActionsMenu floatingActionsMenu;
+    private ActionBarDrawerToggle drawerToggle;
 
     private ArrayList<Player> players;
     private HashMap<Integer, Integer> playersPoint;
     private HashMap<Integer, Boolean> isCallPlayers;
 
     private AppController appController;
-
     private MediaPlayer mp;
+    private AppController.Round round;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
-        appController = (AppController) getApplication();
 
         init();
 
-        Button calcBtn = (Button) findViewById(R.id.calc);
-        calcBtn.setOnClickListener(new View.OnClickListener() {
+        // インタースティシャルの設定
+        final InterstitialAd interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(Consts.AD_UNIT_ID);
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                if (interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                }
+            }
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                setViewOfPlayerData();
+                setGapPoint();
+            }
+        });
+        interstitialAd.loadAd(new AdRequest.Builder()
+                .addTestDevice("21499EE04196C2E0E48CB407366D501F")
+                .build());
+
+
+        findViewById(R.id.game_set).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UiUtil.showDialog(ScoreActivity.this, null, getResources().getString(R.string.half_game_set_message),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                resetGameInfoToResultActivity();
+                            }
+                        });
+                floatingActionsMenu.collapse();
+            }
+        });
+
+        findViewById(R.id.ryukyoku).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(ScoreActivity.this, RyukyokuActivity.class), Consts.REQUEST_CODE);
+                floatingActionsMenu.collapse();
+            }
+        });
+
+        findViewById(R.id.calc).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ScoreActivity.this, MahjongScoringActivity.class);
                 startActivityForResult(intent, Consts.REQUEST_CODE);
-            }
-        });
-
-        Button ryukyokuBtn = (Button) findViewById(R.id.ryukyoku);
-        ryukyokuBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(ScoreActivity.this, RyukyokuActivity.class), Consts.REQUEST_CODE);
+                floatingActionsMenu.collapse();
             }
         });
     }
@@ -72,6 +141,45 @@ public class ScoreActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         mp = new MediaPlayer();
+
+        // 半荘が終了したら結果発表画面へ飛ばす
+        if (appController.isLastGame()) {
+            switch (round) {
+                case EAST:
+                    appController.setIsParent(new boolean[]{true, false, false, false});
+                    round = AppController.Round.SOUTH;
+                    break;
+                case SOUTH:
+                    resetGameInfoToResultActivity();
+                    break;
+                case WEST:
+                    break;
+                case NORTH:
+                    break;
+            }
+        }
+
+        if (round != null && !round.toString().equals("")) {
+            Log.d("ROUND", round.toString());
+
+            roundTextView.setText(round.getWind());
+            numOfRoundTextView.setText(String.valueOf(appController.getNumOfHand()));
+            numOfHonbaTextView.setText(String.valueOf(appController.getNumOfhonba()));
+            numOfDepositBarTextView.setText(String.valueOf(appController.getNumOfDepositBar()));
+        }
+
+        for (int i = 0; i < appController.getIsParent().length; i++) {
+            String playerNameTextId = "p" + (i + 1);
+            int playerNameId = getResources().getIdentifier(playerNameTextId, "id", getPackageName());
+
+            // テキストカラーを親は黄色、子は白にする
+            if (appController.getIsParent()[i]) {
+                ((TextView) findViewById(playerNameId)).setTextColor(Color.YELLOW);
+            } else {
+                ((TextView) findViewById(playerNameId)).setTextColor(Color.WHITE);
+            }
+            Log.d("PARENT", String.valueOf(appController.getIsParent()[i]));
+        }
     }
 
     @Override
@@ -104,10 +212,11 @@ public class ScoreActivity extends ActionBarActivity {
                     Player winner = (Player) data.getSerializableExtra("winner");
                     Player loser = (Player) data.getSerializableExtra("loser");
                     Player parent = (Player) data.getSerializableExtra("parent");
+                    boolean isTumo = loser == null;
 
-                    String msg = winner.getName() + "←"
-                            + (loser == null ? "他家" : loser.getName()) + " "
-                            + (loser == null ? "" + point[0] + ":" + point[1] + ":" + point[2] : point[0]);
+                    String msg = (isTumo
+                            ? winner.getName() + "自摸" + " " + point[1] + ":" + point[0]
+                            : loser.getName() + "→" + winner.getName() + " " + point[0]);
                     UiUtil.showToast(ScoreActivity.this, msg);
 
                     // 和了者の得点
@@ -120,7 +229,6 @@ public class ScoreActivity extends ActionBarActivity {
                     getWinnerPoint += appController.getNumOfDepositBar() * Consts.SEN;
                     appController.setNumOfDepositBar(0);
 
-                    boolean isTumo = loser == null;
                     ArrayList<Player> exceptingWinnerList = new ArrayList<>();
                     for (Player p : players) {
                         // 和了者の持ち点に得点を追加
@@ -156,70 +264,107 @@ public class ScoreActivity extends ActionBarActivity {
                             }
                         }
                     }
+
+                    // 全プレイヤーの立直状態を解除
+                    clearAllPlayerCall();
                 } else if (resultCode == Consts.RYUKYOKU_CODE) {
                     // 流局時の聴牌者人数に応じて得点を振り分け
                     calcRyukyokuPoint((ArrayList<Player>) data.getSerializableExtra("tenpai"));
+
+                    // 全プレイヤーの立直状態を解除
+                    clearAllPlayerCall();
                 }
 
                 // 計算処理後のスコアを画面に反映
                 setPlayersScore();
-
-                // 全プレイヤーの立直状態を解除
-                isCallPlayers.put(players.get(0).getId(), Boolean.FALSE);
-                isCallPlayers.put(players.get(1).getId(), Boolean.FALSE);
-                isCallPlayers.put(players.get(2).getId(), Boolean.FALSE);
-                isCallPlayers.put(players.get(3).getId(), Boolean.FALSE);
+                setGapPoint();
                 break;
             default:
                 break;
         }
-
     }
 
     /**
-     * 画面に表示するデータを初期化。
+     * データを初期化。
      */
     private void init() {
-        playersPoint = new HashMap<>();
-        isCallPlayers = new HashMap<>();
-        players = ((AppController) getApplication()).getPlayers();
-        Integer firstScore = ConstsManager.getFirstScore(getApplicationContext());
+        setUpToolBar();
+        appController = (AppController) getApplication();
+        players = appController.getPlayers();
 
+        playersPoint = new HashMap<>();
+        Integer firstScore = ConstsManager.getFirstScore(getApplicationContext());
         playersPoint.put(players.get(0).getId(), firstScore);
         playersPoint.put(players.get(1).getId(), firstScore);
         playersPoint.put(players.get(2).getId(), firstScore);
         playersPoint.put(players.get(3).getId(), firstScore);
 
-        isCallPlayers.put(players.get(0).getId(), Boolean.FALSE);
-        isCallPlayers.put(players.get(1).getId(), Boolean.FALSE);
-        isCallPlayers.put(players.get(2).getId(), Boolean.FALSE);
-        isCallPlayers.put(players.get(3).getId(), Boolean.FALSE);
-
-        TextView p1Txt = (TextView) findViewById(R.id.p1);
-        TextView p2Txt = (TextView) findViewById(R.id.p2);
-        TextView p3Txt = (TextView) findViewById(R.id.p3);
-        TextView p4Txt = (TextView) findViewById(R.id.p4);
+        floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
 
         p1ScoreTxt = (TextView) findViewById(R.id.p1Score);
         p2ScoreTxt = (TextView) findViewById(R.id.p2Score);
         p3ScoreTxt = (TextView) findViewById(R.id.p3Score);
         p4ScoreTxt = (TextView) findViewById(R.id.p4Score);
+        setPlayersScore();
+
+        p1ScoreTxt.setOnClickListener(playerScoreListener(players.get(0).getId()));
+        p2ScoreTxt.setOnClickListener(playerScoreListener(players.get(1).getId()));
+        p3ScoreTxt.setOnClickListener(playerScoreListener(players.get(2).getId()));
+        p4ScoreTxt.setOnClickListener(playerScoreListener(players.get(3).getId()));
+
+        p2ScoreTxt.setRotation(270);
+        p3ScoreTxt.setRotation(180);
+        p4ScoreTxt.setRotation(90);
+
+        isCallPlayers = new HashMap<>();
+        p1CallBarImageView = (ImageView) findViewById(R.id.p1_call_bar);
+        p2CallBarImageView = (ImageView) findViewById(R.id.p2_call_bar);
+        p3CallBarImageView = (ImageView) findViewById(R.id.p3_call_bar);
+        p4CallBarImageView = (ImageView) findViewById(R.id.p4_call_bar);
+        clearAllPlayerCall();
+
+        round = AppController.Round.EAST;
+        roundTextView = (TextView) findViewById(R.id.text_round);
+        numOfRoundTextView = (TextView) (findViewById(R.id.num_of_round));
+        numOfDepositBarTextView = (TextView) findViewById(R.id.num_of_deposit_bar);
+        numOfHonbaTextView = (TextView) findViewById(R.id.num_of_honba);
+
+        roundTextView.setText(round.getWind());
+        numOfRoundTextView.setText(String.valueOf(appController.getNumOfHand()));
+        numOfDepositBarTextView.setText(String.valueOf(appController.getNumOfDepositBar()));
+        numOfHonbaTextView.setText(String.valueOf(appController.getNumOfhonba()));
+
+        topPlayerNameTextView = (TextView) findViewById(R.id.top_player_name);
+        secondPlayerNameTextView = (TextView) findViewById(R.id.second_player_name);
+        thirdPlayerNameTextView = (TextView) findViewById(R.id.third_player_name);
+        lastPlayerNameTextView = (TextView) findViewById(R.id.last_player_name);
+        gapTopBetweenSecondTextView = (TextView) findViewById(R.id.gap_top_between_second);
+        gapTopBetweenThirdTextView = (TextView) findViewById(R.id.gap_top_between_third);
+        gapTopBetweenLastTextView = (TextView) findViewById(R.id.gap_top_between_last);
+    }
+
+    /**
+     * プレイヤー情報をセット。
+     */
+    private void setViewOfPlayerData() {
+        TextView p1Txt = (TextView) findViewById(R.id.p1);
+        TextView p2Txt = (TextView) findViewById(R.id.p2);
+        TextView p3Txt = (TextView) findViewById(R.id.p3);
+        TextView p4Txt = (TextView) findViewById(R.id.p4);
+
+        p2Txt.setRotation(270);
+        p3Txt.setRotation(180);
+        p4Txt.setRotation(90);
 
         p1Txt.setText(players.get(0).getName());
         p2Txt.setText(players.get(1).getName());
         p3Txt.setText(players.get(2).getName());
         p4Txt.setText(players.get(3).getName());
 
-        p1Txt.setOnClickListener(callListener);
-        p2Txt.setOnClickListener(callListener);
-        p3Txt.setOnClickListener(callListener);
-        p4Txt.setOnClickListener(callListener);
-        p1ScoreTxt.setOnClickListener(playerScoreListener(players.get(0).getId()));
-        p2ScoreTxt.setOnClickListener(playerScoreListener(players.get(1).getId()));
-        p3ScoreTxt.setOnClickListener(playerScoreListener(players.get(2).getId()));
-        p4ScoreTxt.setOnClickListener(playerScoreListener(players.get(3).getId()));
-
-        setPlayersScore();
+        p1Txt.setOnClickListener(callListener(p1CallBarImageView));
+        p2Txt.setOnClickListener(callListener(p2CallBarImageView));
+        p3Txt.setOnClickListener(callListener(p3CallBarImageView));
+        p4Txt.setOnClickListener(callListener(p4CallBarImageView));
     }
 
     /**
@@ -230,6 +375,56 @@ public class ScoreActivity extends ActionBarActivity {
         p2ScoreTxt.setText(String.valueOf(playersPoint.get(players.get(1).getId())));
         p3ScoreTxt.setText(String.valueOf(playersPoint.get(players.get(2).getId())));
         p4ScoreTxt.setText(String.valueOf(playersPoint.get(players.get(3).getId())));
+    }
+
+    /**
+     * トップとの点差をセット。
+     */
+    private void setGapPoint() {
+        // トップのプレイヤーを取得
+        Player topPlayer = new Player();
+        HashMap<Integer, Integer> rankingHashMap = appController.getRankingHashMap(playersPoint);
+        for (Player p : players) {
+            if (rankingHashMap.get(p.getId()) == Consts.TOP) {
+                topPlayer = p;
+                break;
+            }
+        }
+
+        for (Player p : players) {
+            String gapPoint = String.valueOf(playersPoint.get(p.getId()) - playersPoint.get(topPlayer.getId()));
+            switch (rankingHashMap.get(p.getId())) {
+                case Consts.TOP:
+                    topPlayerNameTextView.setText(p.getName());
+                    break;
+                case Consts.SECOND:
+                    secondPlayerNameTextView.setText(p.getName());
+                    gapTopBetweenSecondTextView.setText(gapPoint);
+                    break;
+                case Consts.THIRD:
+                    thirdPlayerNameTextView.setText(p.getName());
+                    gapTopBetweenThirdTextView.setText(gapPoint);
+                    break;
+                case Consts.LAST:
+                    lastPlayerNameTextView.setText(p.getName());
+                    gapTopBetweenLastTextView.setText(gapPoint);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * プレイヤーの得点等の情報や場の状態をリセットして、結果画面へ遷移。
+     */
+    private void resetGameInfoToResultActivity() {
+        appController.addPlayersPoint(playersPoint);
+        appController.setNumOfDepositBar(0);
+        appController.setNumOfhonba(0);
+        appController.setIsParent(new boolean[]{true, false, false, false});
+        startActivity(new Intent(ScoreActivity.this, ResultActivity.class));
+        finish();
     }
 
     /**
@@ -275,41 +470,48 @@ public class ScoreActivity extends ActionBarActivity {
     /**
      * プレイヤー名を押下した際のリスナー。
      */
-    private View.OnClickListener callListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            final String playerName = ((TextView) v).getText().toString();
-            Player buf = null;
+    private View.OnClickListener callListener(final ImageView callBarImageView) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String playerName = ((TextView) v).getText().toString();
+                Player buf = null;
 
-            // 立直宣言者を取得
-            for (Player p : players) {
-                if (p.getName().equals(playerName)) {
-                    buf = p;
+                // 立直宣言者を取得
+                for (Player p : players) {
+                    if (p.getName().equals(playerName)) {
+                        buf = p;
+                    }
                 }
-            }
-            final Player callPlayer = buf;
+                final Player callPlayer = buf;
 
-            // 立直済みかどうかの判定
-            if (callPlayer != null && isCallPlayers.get(callPlayer.getId()).equals(Boolean.TRUE)) {
-                UiUtil.showToast(ScoreActivity.this, getResources().getString(R.string.already_call_message));
-                return;
-            }
+                // 立直済みかどうかの判定
+                if (callPlayer != null && isCallPlayers.get(callPlayer.getId()).equals(Boolean.TRUE)) {
+                    UiUtil.showToast(ScoreActivity.this, getResources().getString(R.string.already_call_message));
+                    return;
+                }
 
-            UiUtil.showDialog(ScoreActivity.this, getResources().getString(R.string.call_message),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (callPlayer != null) {
-                                isCallPlayers.put(callPlayer.getId(), Boolean.TRUE);
+                UiUtil.showDialog(ScoreActivity.this, null, getResources().getString(R.string.call_message),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 立直宣言者の点数から1000点引く
+                                if (callPlayer != null) {
+                                    isCallPlayers.put(callPlayer.getId(), Boolean.TRUE);
+                                    playersPoint.put(callPlayer.getId(), playersPoint.get(callPlayer.getId()) - Consts.SEN);
+                                    appController.setNumOfDepositBar(appController.getNumOfDepositBar() + 1);
+                                    callBarImageView.setVisibility(View.VISIBLE);
+                                }
+                                setPlayersScore();
+
+                                AudioUtil.play(mp, getApplicationContext(),
+                                        Math.random() < 0.5 ? Consts.CALL_VOICE_1_URL : Consts.CALL_VOICE_2_URL,
+                                        null);
                             }
-
-                            AudioUtil.play(mp, getApplicationContext(),
-                                    Math.random() < 0.5 ? Consts.CALL_VOICE_1_URL : Consts.CALL_VOICE_2_URL,
-                                    callVoiceListener(callPlayer));
-                        }
-                    });
-        }
-    };
+                        });
+            }
+        };
+    }
 
     /**
      * 立直ボイスが流れる際のリスナー。
@@ -317,27 +519,30 @@ public class ScoreActivity extends ActionBarActivity {
      * @param callPlayer 立直者
      * @return リスナー
      */
-    private MediaPlayer.OnPreparedListener callVoiceListener(final Player callPlayer) {
-        return new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                if (mp.isPlaying()) {
-                    mp.stop();
-                }
-                mp.start();
-
-                // 立直宣言者の点数から1000点引く
-                if (callPlayer != null) {
-                    playersPoint.put(callPlayer.getId(), playersPoint.get(callPlayer.getId()) - Consts.SEN);
-                    appController.setNumOfDepositBar(appController.getNumOfDepositBar() + 1);
-                }
-                setPlayersScore();
-            }
-        };
-    }
+//    private synchronized MediaPlayer.OnPreparedListener callVoiceListener(final Player callPlayer, final ImageView v) {
+//        return new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                if (mp.isPlaying()) {
+//                    mp.stop();
+//                }
+//                mp.start();
+//
+//                // 立直宣言者の点数から1000点引く
+//                if (callPlayer != null) {
+//                    isCallPlayers.put(callPlayer.getId(), Boolean.TRUE);
+//                    playersPoint.put(callPlayer.getId(), playersPoint.get(callPlayer.getId()) - Consts.SEN);
+//                    appController.setNumOfDepositBar(appController.getNumOfDepositBar() + 1);
+//                    v.setVisibility(View.VISIBLE);
+//                }
+//                setPlayersScore();
+//            }
+//        };
+//    }
 
     /**
      * スコアを押下した際のリスナー。
+     *
      * @param id プレイヤーID
      */
     private View.OnClickListener playerScoreListener(final int id) {
@@ -358,8 +563,10 @@ public class ScoreActivity extends ActionBarActivity {
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        playerScoreText.setText(scoreEditText.getText().toString());
-                                        playersPoint.put(id, Integer.valueOf(scoreEditText.getText().toString()));
+                                        if (scoreEditText.getText() != null && !scoreEditText.getText().toString().equals("")) {
+                                            playerScoreText.setText(scoreEditText.getText().toString());
+                                            playersPoint.put(id, Integer.valueOf(scoreEditText.getText().toString()));
+                                        }
                                     }
                                 })
                         .setNegativeButton(getResources().getString(R.string.cancel),
@@ -374,16 +581,75 @@ public class ScoreActivity extends ActionBarActivity {
         };
     }
 
+    /**
+     * すべてのプレイヤーのリーチをリセットする。
+     */
+    private void clearAllPlayerCall() {
+        isCallPlayers.put(players.get(0).getId(), Boolean.FALSE);
+        isCallPlayers.put(players.get(1).getId(), Boolean.FALSE);
+        isCallPlayers.put(players.get(2).getId(), Boolean.FALSE);
+        isCallPlayers.put(players.get(3).getId(), Boolean.FALSE);
+
+        p1CallBarImageView.setVisibility(View.INVISIBLE);
+        p2CallBarImageView.setVisibility(View.INVISIBLE);
+        p3CallBarImageView.setVisibility(View.INVISIBLE);
+        p4CallBarImageView.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * ツールバーを設定。
+     */
+    private void setUpToolBar() {
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_menu);
+//        toolbar.setTitle(R.string.menu);
+//        toolbar.setBackgroundColor(getResources().getColor(R.color.action_bar));
+//        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+//        setSupportActionBar(toolbar);
+//
+//        // UpNavigationアイコン(アイコン横の<の部分)を有効に
+//        // NavigationDrawerではR.drawable.drawerで上書き
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        // UpNavigationを有効に
+//        getSupportActionBar().setHomeButtonEnabled(true);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.menu, R.string.menu);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        drawer.setDrawerListener(drawerToggle);
+
+        setRecyclerView();
+    }
+
+    /**
+     * Drawer内のRecyclerViewを設定。
+     */
+    private void setRecyclerView() {
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.drawer_view);
+
+        // RecyclerView内のItemサイズが固定の場合に設定すると、パフォーマンス最適化
+        mRecyclerView.setHasFixedSize(true);
+
+        // レイアウトの選択
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // XMLを読込んで表示する
+        String[] drawerMenuArr = getResources().getStringArray(R.array.drawer_list_arr);
+        SimpleDrawerAdapter mAdapter = new SimpleDrawerAdapter(drawerMenuArr, ScoreActivity.this);
+
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode != KeyEvent.KEYCODE_BACK) {
             return super.onKeyDown(keyCode, event);
         } else {
-            UiUtil.showDialog(ScoreActivity.this, getResources().getString(R.string.game_set_message),
+            UiUtil.showDialog(ScoreActivity.this, null, getResources().getString(R.string.game_set_message),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            UiUtil.showDialog(ScoreActivity.this, getResources().getString(R.string.really_half_game_set_message),
+                            UiUtil.showDialog(ScoreActivity.this, null, getResources().getString(R.string.really_half_game_set_message),
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -391,41 +657,34 @@ public class ScoreActivity extends ActionBarActivity {
                                             appController.setGameCnt(1);
                                             appController.setPlayersPointList(new ArrayList<HashMap<Integer, Integer>>());
                                             appController.setNumOfDepositBar(0);
+                                            appController.setNumOfhonba(0);
+                                            appController.setIsParent(new boolean[]{true, false, false, false});
                                             finish();
                                         }
                                     });
                         }
                     });
+            floatingActionsMenu.collapse();
             return false;
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_score, menu);
-        return true;
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.game_set) {
-            UiUtil.showDialog(ScoreActivity.this, getResources().getString(R.string.half_game_set_message),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            appController.addPlayersPoint(playersPoint);
-                            startActivity(new Intent(ScoreActivity.this, ResultActivity.class));
-                            finish();
-                        }
-                    });
+        // ActionBarDrawerToggleにandroid.id.home(up ナビゲーション)を渡す。
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 

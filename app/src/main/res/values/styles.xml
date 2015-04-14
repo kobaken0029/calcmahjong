@@ -1,16 +1,18 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Base.V14.Theme.AppCompat">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <!--&lt;!&ndash; AppCompat の actionBarStyle を設定 &ndash;&gt;-->
         <!--<item name="actionBarStyle">@style/MyActionBarStyle</item>-->
 
         <!--&lt;!&ndash; AppCompat の color theming attrs を設定 &ndash;&gt;-->
-        <!--<item name="colorPrimary">@color/myawesomered-->
-        <!--</item>-->
+        <item name="colorPrimary">@color/action_bar</item>
+        <item name="colorPrimaryDark">@color/action_bar</item>
+    </style>
 
-        <!--<item name="colorPrimaryDark">@color/myawesomedarker_red-->
-        <!--</item>-->
+    <style name="menu_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

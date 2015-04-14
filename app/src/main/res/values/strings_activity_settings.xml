@@ -31,12 +31,14 @@
 
     <string name="pref_title_add_friends_to_messages">順位ウマ</string>
     <string-array name="pref_example_list_titles">
+        <item>なし</item>
         <item>5-10(ゴットー)</item>
         <item>10-20(ワンツー)</item>
         <item>10-30(ワンスリー)</item>
         <item>20-30(ツースリー)</item>
     </string-array>
     <string-array name="pref_example_list_values">
+        <item>なし</item>
         <item>ゴットー</item>
         <item>ワンツー</item>
         <item>ワンスリー</item>
@@ -69,7 +71,7 @@
     <!-- Example settings for Notifications -->
     <string name="pref_header_mode_selection">モード選択</string>
 
-    <string name="pref_title_sanma_mode">三麻モード</string>
+    <string name="pref_title_sanma_mode">三麻モード(未実装)</string>
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>

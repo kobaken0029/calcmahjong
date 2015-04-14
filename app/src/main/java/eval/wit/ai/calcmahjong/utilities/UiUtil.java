@@ -17,10 +17,11 @@ public class UiUtil {
      * ダイアログを表示。
      *
      * @param c        コンテキスト
+     * @param title    タイトル
      * @param msg      メッセージ
      * @param listener リスナー
      */
-    public static void showDialog(Context c, String msg, DialogInterface.OnClickListener listener) {
+    public static void showDialog(Context c, String title, String msg, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(c, R.style.AppTheme));
         builder.setMessage(msg)
                 .setPositiveButton(c.getResources().getString(R.string.ok),
@@ -31,6 +32,10 @@ public class UiUtil {
                             }
                         })
                 .setCancelable(false);
+
+        if (title != null && !title.equals("")) {
+            builder.setTitle(title);
+        }
 
         if (listener != null) {
             builder.setNegativeButton(c.getResources().getString(R.string.cancel),

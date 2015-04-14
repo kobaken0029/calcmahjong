@@ -15,12 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import eval.wit.ai.calcmahjong.R;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.entities.Player;
-import eval.wit.ai.calcmahjong.models.listview.TouchListView;
+import eval.wit.ai.calcmahjong.models.views.TouchListView;
 import eval.wit.ai.calcmahjong.resources.ConstsManager;
 
 /**
@@ -37,15 +38,14 @@ public class SeatingListDialogActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seating_list);
+        appController = (AppController) getApplication();
+        players = new ArrayList<>(appController.getPlayers());
+        Collections.shuffle(players);
 
+
+        // 和了・放銃数を初期化
         HashMap<Integer, Integer> winnerHashMap = new HashMap<>();
         HashMap<Integer, Integer> discardingHashMap = new HashMap<>();
-
-        // ドラッグ・アンド・ドロップ可能なListViewを取得
-        TouchListView tlv = (TouchListView) getListView();
-        appController = (AppController) getApplication();
-        players = appController.getPlayers();
-
         for (Player p : players) {
             array.add(p.getName());
 
@@ -58,6 +58,8 @@ public class SeatingListDialogActivity extends ListActivity {
         adapter = new SeatAdapter();
         setListAdapter(adapter);
 
+        // ドラッグ・アンド・ドロップ可能なListViewを取得
+        TouchListView tlv = (TouchListView) getListView();
         tlv.setDropListener(onDrop);
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);

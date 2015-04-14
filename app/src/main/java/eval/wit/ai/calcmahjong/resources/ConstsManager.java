@@ -65,13 +65,24 @@ public class ConstsManager {
     }
 
     /**
-     * プレイヤーの最初の持ち点を取得します。
+     * 配給原点を取得します。
      *
-     * @return 最初の持ち点
+     * @param context コンテキスト
+     * @return 配給原点
      */
     public static int getFirstScore(Context context) {
         return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
                 .getString("distribution_origin_point_list", "25000"));
+    }
+
+    /**
+     * 原点を取得します。
+     *
+     * @param context コンテキスト
+     * @return 原点
+     */
+    public static int getOriginScore(Context context) {
+        return Consts.O_30000;
     }
 
     /**
@@ -82,8 +93,7 @@ public class ConstsManager {
      */
     public static int getOka(Context context) {
         int oka = 0;
-        switch (PreferenceManager.getDefaultSharedPreferences(context)
-                .getString("distribution_origin_point_list", "25000")) {
+        switch (getFirstScore(context)) {
             case Consts.DO_20000:
                 oka = Consts.OKA_20000_30000;
                 break;
@@ -125,6 +135,8 @@ public class ConstsManager {
                 break;
             case Consts.TWO_THREE:
                 bufOfUma = Consts.TWO_THREE_POINT;
+                break;
+            default:
                 break;
         }
 

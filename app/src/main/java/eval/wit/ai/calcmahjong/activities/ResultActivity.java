@@ -14,6 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.gc.materialdesign.views.ButtonRectangle;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +41,11 @@ public class ResultActivity extends ActionBarActivity {
     private TextView player2ScoreTotalTxt;
     private TextView player3ScoreTotalTxt;
     private TextView player4ScoreTotalTxt;
-    private Button rePlayBtn;
+    private ButtonRectangle rePlayBtn;
 
     private List<Player> players;
     private List<HashMap<Integer, Integer>> playersPointList;
-    private int[] playerTotalScore = new int[ConstsManager.getNumOfPlayer()];
+    private HashMap<Integer, Integer> playerTotalScore;
 
     private int gameCnt;
 
@@ -58,14 +63,10 @@ public class ResultActivity extends ActionBarActivity {
 
 
         // プレイヤー名をTextViewにセット
-        TextView player1Txt = (TextView) findViewById(R.id.player1);
-        TextView player2Txt = (TextView) findViewById(R.id.player2);
-        TextView player3Txt = (TextView) findViewById(R.id.player3);
-        TextView player4Txt = (TextView) findViewById(R.id.player4);
-        player1Txt.setText(players.get(0).getName());
-        player2Txt.setText(players.get(1).getName());
-        player3Txt.setText(players.get(2).getName());
-        player4Txt.setText(players.get(3).getName());
+        ((TextView)findViewById(R.id.player1)).setText(players.get(0).getName());
+        ((TextView)findViewById(R.id.player2)).setText(players.get(1).getName());
+        ((TextView)findViewById(R.id.player3)).setText(players.get(2).getName());
+        ((TextView)findViewById(R.id.player4)).setText(players.get(3).getName());
 
         player1ScoreTotalTxt = (TextView) findViewById(R.id.player1_total);
         player2ScoreTotalTxt = (TextView) findViewById(R.id.player2_total);
@@ -75,11 +76,20 @@ public class ResultActivity extends ActionBarActivity {
         // 半荘ごとのスコアを表に反映
         setScoreView();
 
-        rePlayBtn = (Button) findViewById(R.id.rePlay);
+        rePlayBtn = (ButtonRectangle) findViewById(R.id.rePlay);
         rePlayBtn.setOnClickListener(rePlayListener);
 
-        Button finishBtn = (Button) findViewById(R.id.finish);
-        finishBtn.setOnClickListener(finishListener);
+        findViewById(R.id.finish).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gameSet();
+            }
+        });
+
+        // 広告バナーを表示
+        ((AdView)this.findViewById(R.id.adView_result)).loadAd(new AdRequest.Builder()
+                .addTestDevice("21499EE04196C2E0E48CB407366D501F")
+                .build());
     }
 
     @Override
@@ -91,6 +101,19 @@ public class ResultActivity extends ActionBarActivity {
             rePlayBtn.setVisibility(View.GONE);
         }
     }
+
+    /**
+     * もう一半荘ボタン押下時のリスナー。
+     */
+    View.OnClickListener rePlayListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            gameCnt++;
+            appController.setGameCnt(gameCnt);
+            startActivity(new Intent(ResultActivity.this, ScoreActivity.class));
+            finish();
+        }
+    };
 
     /**
      * 現在のスコアを表にセット。
@@ -110,6 +133,8 @@ public class ResultActivity extends ActionBarActivity {
         int numOfHantyanResId = getResources().getIdentifier(numOfHantyanTxtResId, "id", getPackageName());
         TextView numOfHantyanTxt = (TextView) findViewById(numOfHantyanResId);
         numOfHantyanTxt.setTextColor(Color.YELLOW);
+        playerTotalScore = new HashMap<>();
+        int[] totalScoreBuf = new int[ConstsManager.getNumOfPlayer()];
 
         for (int i = 0; i < gameCnt; i++) {
             player1ScoreTxtResId = "player1_score" + (i + 1);
@@ -127,7 +152,7 @@ public class ResultActivity extends ActionBarActivity {
 
             // 現在のゲームの場合、得点を計算
             if (i == gameCnt - 1) {
-                calcScore();
+                calcScore(playersPointList.get(i));
             }
 
             player1ScoreTxt[i].setText(playersPointList.get(i).get(players.get(0).getId()).toString());
@@ -135,58 +160,47 @@ public class ResultActivity extends ActionBarActivity {
             player3ScoreTxt[i].setText(playersPointList.get(i).get(players.get(2).getId()).toString());
             player4ScoreTxt[i].setText(playersPointList.get(i).get(players.get(3).getId()).toString());
 
-            playerTotalScore[0] += playersPointList.get(i).get(players.get(0).getId());
-            playerTotalScore[1] += playersPointList.get(i).get(players.get(1).getId());
-            playerTotalScore[2] += playersPointList.get(i).get(players.get(2).getId());
-            playerTotalScore[3] += playersPointList.get(i).get(players.get(3).getId());
+            totalScoreBuf[0] += playersPointList.get(i).get(players.get(0).getId());
+            totalScoreBuf[1] += playersPointList.get(i).get(players.get(1).getId());
+            totalScoreBuf[2] += playersPointList.get(i).get(players.get(2).getId());
+            totalScoreBuf[3] += playersPointList.get(i).get(players.get(3).getId());
         }
 
-        player1ScoreTotalTxt.setText(String.valueOf(playerTotalScore[0]));
-        player2ScoreTotalTxt.setText(String.valueOf(playerTotalScore[1]));
-        player3ScoreTotalTxt.setText(String.valueOf(playerTotalScore[2]));
-        player4ScoreTotalTxt.setText(String.valueOf(playerTotalScore[3]));
+        playerTotalScore.put(players.get(0).getId(), totalScoreBuf[0]);
+        playerTotalScore.put(players.get(1).getId(), totalScoreBuf[1]);
+        playerTotalScore.put(players.get(2).getId(), totalScoreBuf[2]);
+        playerTotalScore.put(players.get(3).getId(), totalScoreBuf[3]);
+
+        player1ScoreTotalTxt.setText(String.valueOf(playerTotalScore.get(players.get(0).getId())));
+        player2ScoreTotalTxt.setText(String.valueOf(playerTotalScore.get(players.get(1).getId())));
+        player3ScoreTotalTxt.setText(String.valueOf(playerTotalScore.get(players.get(2).getId())));
+        player4ScoreTotalTxt.setText(String.valueOf(playerTotalScore.get(players.get(3).getId())));
     }
 
     /**
      * スコアを計算する。
+     *
+     * @param playersPoint プレイヤーの得点
      */
-    private void calcScore() {
-        HashMap<Integer, Integer> playersPoint = playersPointList.get(gameCnt - 1);
+    private void calcScore(HashMap<Integer, Integer> playersPoint) {
+        int topId = players.get(0).getId();
+
+        // 順位を決定する
+        // プレイヤーの順位<プレイヤーID， 順位>
+        HashMap<Integer, Integer> playersRankingHashMap = appController.getRankingHashMap(playersPoint);
 
         // プレイヤーの持ち点からスコアを算出
         for (Player p : players) {
             Log.d("SCORE_BEFORE", p.getName() + " " + playersPoint.get(p.getId()).toString());
-            playersPoint.put(p.getId(), (playersPoint.get(p.getId()) - 30000) / 1000);
+            playersPoint.put(p.getId(), (int)(new BigDecimal(playersPoint.get(p.getId()) / 1000.0)
+                                                .setScale(0, BigDecimal.ROUND_HALF_DOWN).doubleValue())
+                                        - (ConstsManager.getOriginScore(getApplicationContext()) / 1000));
             Log.d("SCORE_AFTER", p.getName() + " " + playersPoint.get(p.getId()).toString());
-        }
-
-        // 順位を決定する
-        // プレイヤーの順位<プレイヤーID， 順位>
-        HashMap<Integer, Integer> playersRankingHashMap = new HashMap<>();
-        int topId = players.get(0).getId();
-        for (Player p : players) {
-
-            int ranking = 1;
-            for (Player exp : players) {
-                // 現在のプレイヤー以外の場合
-                if (exp.getId() != p.getId()) {
-                    if (playersPoint.get(p.getId()) < playersPoint.get(exp.getId())) {
-                        ranking++;
-                    }
-
-                    if (playersRankingHashMap.containsValue(ranking)) {
-                        ranking++;
-                    }
-                }
-            }
-
-            playersRankingHashMap.put(p.getId(), ranking);
 
             // トップを探す
-            if (ranking == Consts.TOP) {
+            if (playersRankingHashMap.get(p.getId()) == Consts.TOP) {
                 topId = p.getId();
             }
-            Log.d("RANKING", p.getName() + " " + playersRankingHashMap.get(p.getId()) + "位");
         }
 
         // トップの得点にオカを反映させる
@@ -199,53 +213,24 @@ public class ResultActivity extends ActionBarActivity {
                             + ConstsManager.getUma(getApplicationContext(), playersRankingHashMap.get(p.getId())));
         }
 
-
         // 得点リストに追加
         playersPointList.add(playersPoint);
     }
 
     /**
-     * もう一半荘ボタン押下時のリスナー。
-     */
-    View.OnClickListener rePlayListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            gameCnt++;
-            appController.setGameCnt(gameCnt);
-            startActivity(new Intent(ResultActivity.this, ScoreActivity.class));
-            finish();
-        }
-    };
-
-    /**
-     * ゲーム終了ボタン押下時のリスナー。
-     */
-    View.OnClickListener finishListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            gameSet();
-        }
-    };
-
-    /**
      * 試合終了時の処理。
      */
     private void gameSet() {
-        UiUtil.showDialog(ResultActivity.this, getResources().getString(R.string.game_set_message),
+        UiUtil.showDialog(ResultActivity.this, null, getResources().getString(R.string.game_set_message),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        appController.setGameCnt(1);
-                        appController.setPlayersPointList(new ArrayList<HashMap<Integer, Integer>>());
-                        appController.setNumOfDepositBar(0);
-
+                        HashMap<Integer, Integer> rankingHashMap = appController.getRankingHashMap(playerTotalScore);
                         DatabaseAdapter adapter = appController.getDbAdapter();
                         adapter.open();
-                        int i = 0;
+
                         for (Player p : players) {
                             Record record = null;
-                            int score = 0;
 
                             // 成績を取得
                             Cursor c = adapter.getPlayerRecord(p.getId());
@@ -263,61 +248,29 @@ public class ResultActivity extends ActionBarActivity {
                                         c.getInt(c.getColumnIndex(DatabaseAdapter.COL_DISCARDING)));
                             }
 
-                            // 該当プレイヤーの総スコアを取得
-                            switch (i) {
-                                case 0:
-                                    score = Integer.parseInt(player1ScoreTotalTxt.getText().toString());
-                                    break;
-                                case 1:
-                                    score = Integer.parseInt(player2ScoreTotalTxt.getText().toString());
-                                    break;
-                                case 2:
-                                    score = Integer.parseInt(player3ScoreTotalTxt.getText().toString());
-                                    break;
-                                case 3:
-                                    score = Integer.parseInt(player4ScoreTotalTxt.getText().toString());
-                                    break;
-                            }
-
                             // 成績をつける
                             if (record != null) {
-                                record.setTotalScore(score);
+                                record.setTotalScore(playerTotalScore.get(p.getId()));
+                                record.setTotalPlay(record.getTotalPlay() + appController.getGameCnt());
                                 record.setWinning(record.getWinning() + appController.getWinningHashMap().get(p.getId()));
                                 record.setDiscarding(record.getDiscarding() + appController.getDiscardingHashMap().get(p.getId()));
-                            }
+                                record.setRanking(rankingHashMap.get(p.getId()));
 
-                            // 成績を更新
-                            Log.d("FINAL_RESULT_RANKING", p.getName() + " " + getFinalResultRanking(i) + "位");
-                            adapter.updateRecord(record, getFinalResultRanking(i));
-                            i++;
+                                Log.d("FINAL_RESULT_RANKING",
+                                        p.getName() + " " + rankingHashMap.get(p.getId()) + "位");
+                                // 成績を更新
+                                adapter.updateRecord(record);
+                            }
                         }
                         adapter.close();
 
+                        dialog.cancel();
+                        appController.setGameCnt(1);
+                        appController.setPlayersPointList(new ArrayList<HashMap<Integer, Integer>>());
+                        appController.setNumOfDepositBar(0);
                         finish();
                     }
                 });
-    }
-
-    /**
-     * 最終的なプレイヤーの順位を取得。
-     * @param numOfSeat プレイヤーの席
-     * @return 順位
-     */
-    private int getFinalResultRanking(int numOfSeat) {
-        int ranking = 1;
-
-        double buf = playerTotalScore[numOfSeat];
-        for (int i = 0; i < playerTotalScore.length; i++) {
-            if (i == numOfSeat) {
-                continue;
-            }
-
-            if (buf < playerTotalScore[i]) {
-                ranking++;
-            }
-        }
-
-        return ranking;
     }
 
     @Override

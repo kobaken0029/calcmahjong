@@ -1,29 +1,24 @@
 package eval.wit.ai.calcmahjong.activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import eval.wit.ai.calcmahjong.R;
-import eval.wit.ai.calcmahjong.dialogs.NumberPickerDialog;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.entities.Player;
 import eval.wit.ai.calcmahjong.resources.Consts;
@@ -36,9 +31,9 @@ public class MahjongScoringActivity extends ActionBarActivity {
     private Spinner loserSpinner;
     private Spinner numberOfHanSpinner;
     private Spinner numberOfFuSpinner;
-    private Spinner parentSpinner;
-    private EditText honbaEditText;
-    private NumberPicker honbaNumberPicker;
+//    private Spinner parentSpinner;
+//    private EditText honbaEditText;
+//    private NumberPicker honbaNumberPicker;
 
     private ArrayList<Player> players;
     private Player parent;
@@ -51,7 +46,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
     private MediaPlayer mp;
 
     private boolean isClicked;
-
+    private boolean isParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +54,21 @@ public class MahjongScoringActivity extends ActionBarActivity {
         setContentView(R.layout.activity_mahjong_scoring);
         appController = (AppController) getApplication();
         mp = new MediaPlayer();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         winnerSpinner = (Spinner) findViewById(R.id.winnerSpinner);
         loserSpinner = (Spinner) findViewById(R.id.loserSpinner);
         numberOfHanSpinner = (Spinner) findViewById(R.id.hanSpinner);
         numberOfFuSpinner = (Spinner) findViewById(R.id.fuSpinner);
-        parentSpinner = (Spinner) findViewById(R.id.parentSpinner);
-        honbaEditText = (EditText) findViewById(R.id.honba);
-
-        honbaEditText.setOnClickListener(honbaListener);
 
         // スピナーに値をセット。
         setSpinner();
 
-        Button calcBtn = (Button) findViewById(R.id.calc);
-        calcBtn.setOnClickListener(calcListener);
+        findViewById(R.id.calc).setOnClickListener(calcListener);
+
+        // 広告バナーを表示
+        ((AdView)this.findViewById(R.id.adView_scoring)).loadAd(new AdRequest.Builder()
+                .addTestDevice("21499EE04196C2E0E48CB407366D501F")
+                .build());
     }
 
     @Override
@@ -98,32 +92,32 @@ public class MahjongScoringActivity extends ActionBarActivity {
     /**
      * 本場数を押下した際のリスナー。
      */
-    private View.OnClickListener honbaListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View npView = inflater.inflate(R.layout.number_picker_dialog, null);
-            honbaNumberPicker = (NumberPicker) npView.findViewById(R.id.numberPicker);
-
-            new NumberPickerDialog().showDialog(MahjongScoringActivity.this, npView, honbaNumberPicker,
-                    getResources().getString(R.string.honba_message), Consts.MIN_NUMBER_OF_HONBA, Consts.MAX_NUMBER_OF_HONBA,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            honbaEditText.setText(String.valueOf(honbaNumberPicker.getValue()));
-                        }
-                    });
-        }
-    };
+//    private View.OnClickListener honbaListener = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//            LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            View npView = inflater.inflate(R.layout.number_picker_dialog, null);
+//            honbaNumberPicker = (NumberPicker) npView.findViewById(R.id.numberPicker);
+//
+//            new NumberPickerDialog().showDialog(MahjongScoringActivity.this, npView, honbaNumberPicker,
+//                    getResources().getString(R.string.honba_message), Consts.MIN_NUMBER_OF_HONBA, Consts.MAX_NUMBER_OF_HONBA,
+//                    new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            honbaEditText.setText(String.valueOf(honbaNumberPicker.getValue()));
+//                        }
+//                    });
+//        }
+//    };
 
     /**
      * スピナーに値をセット。
      */
     public void setSpinner() {
-        ArrayAdapter<String> winnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item);
-        ArrayAdapter<String> loserAdapter = new ArrayAdapter<>(this, R.layout.spinner_item);
+        ArrayAdapter<String> winnerAdapter = new ArrayAdapter<>(MahjongScoringActivity.this, R.layout.spinner_item);
+        ArrayAdapter<String> loserAdapter = new ArrayAdapter<>(MahjongScoringActivity.this, R.layout.spinner_item);
 
         // 参加者を取得
         players = appController.getPlayers();
@@ -137,14 +131,15 @@ public class MahjongScoringActivity extends ActionBarActivity {
             loserAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         }
         winnerSpinner.setAdapter(winnerAdapter);
-        parentSpinner.setAdapter(winnerAdapter);
+//        parentSpinner.setAdapter(winnerAdapter);
 
         // 他家を加えセット
         loserAdapter.add("他家(ツモアガリ)");
         loserSpinner.setAdapter(loserAdapter);
+        loserSpinner.setSelection(1);
 
         // 飜数セット
-        numberOfHanSpinner.setAdapter(ConstsManager.getHanAdapter(this));
+        numberOfHanSpinner.setAdapter(ConstsManager.getHanAdapter(MahjongScoringActivity.this));
 
         // 符数セット
         numberOfFuSpinner.setAdapter(ConstsManager.getFuAdapter(this));
@@ -157,6 +152,8 @@ public class MahjongScoringActivity extends ActionBarActivity {
     View.OnClickListener calcListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            int cnt = 0;
+
             // 和了者、放銃者、親をセット
             for (Player p : players) {
                 if (p.getName().equals(winnerSpinner.getSelectedItem().toString())) {
@@ -167,15 +164,19 @@ public class MahjongScoringActivity extends ActionBarActivity {
                     loser = p;
                 }
 
-                if (p.getName().equals(parentSpinner.getSelectedItem().toString())) {
+                if (appController.getIsParent()[cnt]) {
                     parent = p;
                 }
+
+                cnt++;
             }
 
             // 自摸和了の場合
             if (loserSpinner.getSelectedItem().toString().equals("他家(ツモアガリ)")) {
                 loser = null;
             }
+
+            boolean isTumo = loser == null;
 
             // 和了者と放銃者が同一人物の場合
             if (winner.equals(loser)) {
@@ -184,7 +185,7 @@ public class MahjongScoringActivity extends ActionBarActivity {
             }
 
             // 20符ロン和了の場合
-            if (loser != null && numberOfFuSpinner.getSelectedItem().toString().equals(Consts.NIZYU_FU)) {
+            if (!isTumo && numberOfFuSpinner.getSelectedItem().toString().equals(Consts.NIZYU_FU)) {
                 UiUtil.showToast(MahjongScoringActivity.this, "20符のロン和了は存在しません。");
                 return;
             }
@@ -203,31 +204,53 @@ public class MahjongScoringActivity extends ActionBarActivity {
                 return;
             }
 
-            int honba = 0;
-            if (!honbaEditText.getText().toString().equals("")) {
-                honba = Integer.parseInt(honbaEditText.getText().toString());
-            }
-
             // 和了者が親かどうかの判定
-            boolean isParent = parent.getId() == winner.getId();
+            isParent = parent.getId() == winner.getId();
 
             // 得点を取得
             point = ConstsManager.calcPoint(numberOfFuSpinner.getSelectedItem().toString(),
                     numberOfHanSpinner.getSelectedItem().toString(),
                     isParent,
-                    loser == null,
-                    honba);
+                    isTumo,
+                    appController.getNumOfhonba());
 
-            String msg = "アガリ: " + winner.getName() + "\n"
-                    + (loser == null ? "自摸和了" : "放銃者: " + loser.getName()) + "\n"
-                    + "飜数: " + numberOfHanSpinner.getSelectedItem().toString() + "\n"
-                    + "符数: " + numberOfFuSpinner.getSelectedItem().toString() + "\n"
-                    + honba + "本場" + "\n"
-                    + "得点: " + point[0] + "\n"
-                    + "親: " + parent.getName();
-            UiUtil.showDialog(MahjongScoringActivity.this, msg, listener);
+            // 得点結果をダイアログで表示
+            showPointResultDialog(point, isTumo);
         }
     };
+
+    /**
+     * 得点をダイアログで表示。
+     *
+     * @param point 得点
+     */
+    private void showPointResultDialog(int[] point, boolean isTumo) {
+        int[] natureScores = new int[3];
+        int honbaTumoPoint = appController.getNumOfhonba() * 100;
+        int honbaRonPoint = appController.getNumOfhonba() * 300;
+
+        for (int i = 0; i < 3; i++) {
+            if (!isTumo) {
+                natureScores[0] = point[0] - honbaRonPoint;
+                break;
+            }
+            natureScores[i] = point[i] - honbaTumoPoint;
+        }
+
+        String msg = "親 : " + parent.getName() + "\n"
+                + (appController.getNumOfhonba() != 0 ? appController.getNumOfhonba() + "本場\n" : "")
+                + (isTumo ? winner.getName() + " 自摸" : loser.getName() + " → " + winner.getName()) + "\n"
+                + numberOfFuSpinner.getSelectedItem().toString()
+                + numberOfHanSpinner.getSelectedItem().toString() + "\n"
+                + (isTumo
+                    ? (parent.getName().equals(winner.getName())
+                        ? natureScores[0] + "オール"
+                        : natureScores[1] + "・" + natureScores[0]
+                        + (appController.getNumOfhonba() != 0 ? "(+" + honbaTumoPoint + ")" : ""))
+                    : natureScores[0] + (appController.getNumOfhonba() != 0 ? "(+" + honbaRonPoint + ")" : ""));
+
+        UiUtil.showDialog(MahjongScoringActivity.this, null, msg, listener);
+    }
 
     /**
      * ダイアログでPositiveなボタンを押下した時のリスナー。
@@ -239,6 +262,14 @@ public class MahjongScoringActivity extends ActionBarActivity {
                 UiUtil.showToast(MahjongScoringActivity.this,
                         getResources().getString(R.string.already_processing_message));
                 return;
+            }
+
+            // 親なら連荘
+            if (isParent) {
+                appController.setNumOfhonba(appController.getNumOfhonba() + 1);
+            } else {
+                appController.flowParent();
+                appController.setNumOfhonba(0);
             }
 
             isClicked = true;

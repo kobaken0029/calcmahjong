@@ -5,11 +5,13 @@
     <item
         android:id="@+id/registration"
         android:title="@string/player_registration"
+        android:icon="@drawable/ic_action_social_person_add"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/settings"
         android:title="@string/setting"
+        android:icon="@drawable/ic_action_action_settings"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>

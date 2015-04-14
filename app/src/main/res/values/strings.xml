@@ -2,20 +2,32 @@
 <resources>
 
     <!-- MENU -->
-    <string name="app_name">麻雀電卓</string>
-    <string name="game_start">ゲーム開始</string>
+    <string name="menu">MENU</string>
+    <string name="game_start">対局開始</string>
     <string name="setting">設定</string>
 
+    <!-- Wikipedia -->
+    <string name="mahjong_yaku_list">麻雀役一覧</string>
+
     <!-- 席順決め -->
-    <string name="seating_plan_title">席を決めてください</string>
+    <string name="game_information_title">対局情報</string>
+    <string name="seating_plan_title">席が決まりました\nD&amp;Dで自由に席を入れ替えられます</string>
 
     <!-- 点数表示 -->
     <string name="title_activity_score">点数表示</string>
     <string name="win">和了</string>
     <string name="half_game_set_message">半荘を終了してもよいですか?</string>
-    <string name="really_half_game_set_message">現在の半荘の成績は反映されません\n本当に終了しますか?</string>
+    <string name="really_half_game_set_message">この対局結果は成績に反映されません\n本当に終了しますか?</string>
     <string name="call_message">立直しますか?</string>
     <string name="already_call_message">既に立直済みです</string>
+    <string name="num_of_deposit_bar">供託棒:</string>
+    <string name="honba">本場</string>
+    <string name="num_of_honba">本場数    :</string>
+    <string name="gap_between_top_point">トップとの点差</string>
+    <string name="top">トップ</string>
+    <string name="second">2着</string>
+    <string name="third">3着</string>
+    <string name="last">ラス</string>
 
     <!-- 点数計算 -->
     <string name="title_activity_mahjong_scoring">点数計算</string>
@@ -29,7 +41,6 @@
     <string name="num_of_fu">符数</string>
     <string name="parent">親</string>
     <string name="how_many_honba_message">何本場かを入力してください</string>
-    <string name="honba">本場</string>
     <string name="calc">計算</string>
 
     <!-- 成績照会 -->
@@ -37,28 +48,29 @@
     <string name="player_name">名前</string>
     <string name="player_message">ひとこと</string>
     <string name="player_score">総スコア</string>
+    <string name="average_ranking">平均順位</string>
     <string name="num_of_player_win">和了数</string>
     <string name="num_of_player_lose">放銃数</string>
     <string name="player_top_rate">トップ率</string>
     <string name="num_of_play">総半荘数</string>
 
-    <!-- プレイヤー一覧 -->
-    <string name="title_activity_player_list">プレイヤー一覧</string>
-    <string name="player_registration">プレイヤー登録</string>
+    <!-- 雀士一覧 -->
+    <string name="title_activity_player_list">雀士一覧</string>
+    <string name="player_registration">雀士登録</string>
     <string name="delete">削除</string>
     <string name="delete_message">本当に削除してもいいですか?</string>
 
-    <!-- プレイヤー登録 -->
-    <string name="title_activity_player_registration">プレイヤー登録</string>
+    <!-- 雀士登録 -->
+    <string name="title_activity_player_registration">雀士登録</string>
     <string name="registration">登録</string>
     <string name="name">name</string>
     <string name="message">message</string>
     <string name="name_duplication_message">その名前は既に使用されています</string>
     <string name="name_nothing_message">名前を入力してください</string>
-    <string name="number_of_name_over_message">名前は4文字以内で入力してください</string>
+    <string name="number_of_name_over_message">名前は3文字以内で入力してください</string>
 
-    <!-- 試合結果 -->
-    <string name="title_activity_result">結果発表</string>
+    <!-- 対局結果 -->
+    <string name="title_activity_result">対局結果</string>
     <string name="num_of_hantyan_1">1</string>
     <string name="num_of_hantyan_2">2</string>
     <string name="num_of_hantyan_3">3</string>
@@ -67,9 +79,9 @@
     <string name="replay">もう半荘！</string>
 
     <!-- 共通 -->
-    <string name="menu">MENU</string>
+    <string name="app_name">麻雀電卓</string>
     <string name="number_of_player_error">選択できる人数は4人です</string>
-    <string name="game_set">試合終了</string>
+    <string name="game_set">終了</string>
     <string name="game_set_message">試合を終了しますか?</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -81,5 +93,8 @@
     <string name="title_activity_ryukyoku_dialog">RyukyokuDialogActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="drawer_open">オープン</string>
+    <string name="drawer_close">クローズ</string>
+    <string name="title_activity_wikipedia_web_view">WikipediaWebViewActivity</string>
 
 </resources>

@@ -1,20 +1,22 @@
 package eval.wit.ai.calcmahjong.activities;
 
 import android.database.Cursor;
-import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import eval.wit.ai.calcmahjong.R;
 import eval.wit.ai.calcmahjong.models.clients.AppController;
 import eval.wit.ai.calcmahjong.models.db.DatabaseAdapter;
 import eval.wit.ai.calcmahjong.models.entities.Player;
 import eval.wit.ai.calcmahjong.models.entities.Record;
+import eval.wit.ai.calcmahjong.resources.Consts;
 
 public class PlayerRecordActivity extends ActionBarActivity {
     private TextView nameTxetView;
@@ -40,6 +42,14 @@ public class PlayerRecordActivity extends ActionBarActivity {
         Player player = (Player) getIntent().getSerializableExtra("player");
         Record record = getRecord(player.getId());
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_player_record);
+        toolbar.setTitle(getResources().getString(R.string.title_activity_player_record));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.action_bar));
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         nameTxetView = (TextView) findViewById(R.id.name);
         nameTxetView.setText(player.getName());
         messageTxetView = (TextView) findViewById(R.id.message);
@@ -51,6 +61,8 @@ public class PlayerRecordActivity extends ActionBarActivity {
         scoreTextView = (TextView) findViewById(R.id.score);
         scoreTextView.setText(String.valueOf(record.getTotalScore()));
 
+        ((TextView) findViewById(R.id.ave_ranking)).setText(String.valueOf(calcAverageRanking(record)));
+
         numOfWinTextView = (TextView) findViewById(R.id.win);
         numOfWinTextView.setText(String.valueOf(record.getWinning()));
 
@@ -59,6 +71,11 @@ public class PlayerRecordActivity extends ActionBarActivity {
 
         topRateTextView = (TextView) findViewById(R.id.top_rate);
         topRateTextView.setText(String.valueOf(calcTopRate(record)) + "%");
+
+        // 広告バナーを表示
+        ((AdView)this.findViewById(R.id.adView_player_record)).loadAd(new AdRequest.Builder()
+                .addTestDevice("21499EE04196C2E0E48CB407366D501F")
+                .build());
     }
 
     /**
@@ -68,7 +85,7 @@ public class PlayerRecordActivity extends ActionBarActivity {
      * @return 成績
      */
     private Record getRecord(int playerId) {
-        Record record = null;
+        Record record = new Record();
 
         adapter.open();
         Cursor c = adapter.getPlayerRecord(playerId);
@@ -92,20 +109,38 @@ public class PlayerRecordActivity extends ActionBarActivity {
     }
 
     /**
+     * 平均順位を計算。
+     *
+     * @param record 成績
+     * @return 平均順位
+     */
+    private double calcAverageRanking(Record record) {
+        double averageRanking = 0.0;
+
+        if (record.getTotalPlay() != 0) {
+            averageRanking = (double) (record.getTop()
+                    + record.getSecond() * Consts.SECOND
+                    + record.getThird() * Consts.THIRD
+                    + record.getLast() * Consts.LAST) / record.getTotalPlay();
+        }
+
+        return Math.round(averageRanking * 10) / 10.0;
+    }
+
+    /**
      * トップ率を計算。
      *
      * @param record 成績
      * @return トップ率
      */
     private double calcTopRate(Record record) {
-        int numOfPlay = record.getTotalPlay();
         double rate = 0.0;
 
-        if (numOfPlay != 0) {
-            rate = (((double) record.getTop()) / numOfPlay) * 100.0;
+        if (record.getTotalPlay() != 0) {
+            rate = (((double) record.getTop()) / record.getTotalPlay()) * 100.0;
         }
 
-        return (double) Math.round(rate * 10) / 10;
+        return Math.round(rate * 10) / 10.0;
     }
 
     @Override

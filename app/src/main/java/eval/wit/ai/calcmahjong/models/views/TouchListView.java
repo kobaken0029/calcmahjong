@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package eval.wit.ai.calcmahjong.models.listview;
+package eval.wit.ai.calcmahjong.models.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;

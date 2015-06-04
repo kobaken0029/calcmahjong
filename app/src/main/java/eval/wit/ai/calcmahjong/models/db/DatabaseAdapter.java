@@ -46,6 +46,7 @@ public class DatabaseAdapter {
 
     /**
      * コンストラクタ。
+     *
      * @param context コンテキスト
      */
     public DatabaseAdapter(Context context) {
@@ -55,6 +56,7 @@ public class DatabaseAdapter {
 
     /**
      * DBを開きます。
+     *
      * @return dbHelper
      */
     public DatabaseAdapter open() {
@@ -76,6 +78,7 @@ public class DatabaseAdapter {
 
     /**
      * すべてのプレイヤーを取得します。
+     *
      * @return 検索結果カーソル
      */
     public Cursor getAllPlayers() {
@@ -84,28 +87,31 @@ public class DatabaseAdapter {
 
     /**
      * プレイ中のプレイヤーを取得します。
+     *
      * @return 検索結果カーソル
      */
     public Cursor getIsPlayPlayer() {
         String where = COL_IS_PLAY + " = ?";
-        String[] param = { "1" };
+        String[] param = {"1"};
         return db.query(PLAYERS_TABLE_NAME, null, where, param, null, null, null);
     }
 
     /**
      * 名前からプレイヤーを取得します。
+     *
      * @param name プレイヤー名
      * @return 検索結果カーソル
      */
     public Cursor getPlayerByName(String name) {
         String where = COL_NAME + " = ?";
-        String[] param = { name };
+        String[] param = {name};
         return db.query(PLAYERS_TABLE_NAME, null, where, param, null, null, null);
     }
 
     /**
      * プレイヤーを保存します。
-     * @param name 名前
+     *
+     * @param name    名前
      * @param message ひとこと
      */
     public void savePlayer(String name, String message) {
@@ -126,6 +132,7 @@ public class DatabaseAdapter {
 
     /**
      * プレイヤーを更新します。
+     *
      * @param player プレイヤー
      */
     public void updatePlayer(Player player) {
@@ -133,7 +140,7 @@ public class DatabaseAdapter {
         ContentValues values = new ContentValues();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String whereClause = COL_ID + " = ?";
-        String[] whereArgs = { String.valueOf(player.getId()) };
+        String[] whereArgs = {String.valueOf(player.getId())};
         values.put(COL_NAME, player.getName());
         values.put(COL_MESSAGE, player.getMessage());
         values.put(COL_IS_PLAY, player.isPlay());
@@ -143,6 +150,7 @@ public class DatabaseAdapter {
 
     /**
      * すべてのプレイヤーを削除します。
+     *
      * @return 成否
      */
     public boolean daleteAllPlayers() {
@@ -151,6 +159,7 @@ public class DatabaseAdapter {
 
     /**
      * 指定IDのプレイヤーを削除します。
+     *
      * @param id プレイヤーID
      * @return 成否
      */
@@ -160,12 +169,13 @@ public class DatabaseAdapter {
 
     /**
      * 名前が重複している場合はtrueを返します。
+     *
      * @param name 名前
      * @return 重複している場合はtrue
      */
     public boolean isDuplicationPlayer(String name) {
         String where = COL_NAME + " = ?";
-        String[] param = { name };
+        String[] param = {name};
 
         Cursor c = db.query(PLAYERS_TABLE_NAME, null, where, param, null, null, null);
 
@@ -192,11 +202,12 @@ public class DatabaseAdapter {
 
     /**
      * プレイヤーの成績を取得します。
+     *
      * @return 検索結果カーソル
      */
     public Cursor getPlayerRecord(int playerId) {
         String where = COL_PLAYER_ID + " = ?";
-        String[] param = { String.valueOf(playerId) };
+        String[] param = {String.valueOf(playerId)};
         return db.query(RECORD_TABLE_NAME, null, where, param, null, null, null);
     }
 
@@ -227,6 +238,7 @@ public class DatabaseAdapter {
 
     /**
      * 成績を更新します。
+     *
      * @param record 成績
      */
     public void updateRecord(Record record) {
@@ -234,7 +246,7 @@ public class DatabaseAdapter {
         ContentValues values = new ContentValues();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String whereClause = COL_ID + " = ?";
-        String[] whereArgs = { String.valueOf(record.getId()) };
+        String[] whereArgs = {String.valueOf(record.getId())};
         int top = record.getTop();
         int second = record.getSecond();
         int third = record.getThird();
@@ -255,6 +267,7 @@ public class DatabaseAdapter {
 
     /**
      * すべての成績を削除します。
+     *
      * @return 成否
      */
     public boolean daleteAllRecords() {
@@ -263,6 +276,7 @@ public class DatabaseAdapter {
 
     /**
      * 指定プレイヤーIDの成績を削除します。
+     *
      * @param playerId プレイヤーID
      * @return 成否
      */

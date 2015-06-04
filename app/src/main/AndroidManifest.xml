@@ -9,13 +9,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".models.clients.AppController"
+        android:name="eval.wit.ai.calcmahjongpro.models.clients.AppController"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activities.MenuActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.MenuActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter android:label="@string/menu" >
@@ -25,60 +25,60 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ScoreActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.ScoreActivity"
             android:label="@string/title_activity_score"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.MahjongScoringActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.MahjongScoringActivity"
             android:label="@string/title_activity_mahjong_scoring"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
         <activity
-            android:name=".activities.PlayerRecordActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.PlayerRecordActivity"
             android:label="@string/title_activity_player_record"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.PlayerListActivity" />
+                android:value="eval.wit.ai.calcmahjongpro.activities.PlayerListActivity" />
         </activity>
         <activity
-            android:name=".activities.PlayerListActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.PlayerListActivity"
             android:label="@string/title_activity_player_list"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MenuActivity" />
+                android:value="eval.wit.ai.calcmahjongpro.activities.MenuActivity" />
         </activity>
         <activity
-            android:name=".activities.PlayerRegistrationActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.PlayerRegistrationActivity"
             android:label="@string/title_activity_player_registration"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MenuActivity" />
+                android:value="eval.wit.ai.calcmahjongpro.activities.MenuActivity" />
         </activity>
         <activity
-            android:name=".activities.ResultActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.ResultActivity"
             android:label="@string/title_activity_result"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.RyukyokuActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.RyukyokuActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name=".activities.SeatingListDialogActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.SeatingListDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name=".activities.WikipediaWebViewActivity"
+            android:name="eval.wit.ai.calcmahjongpro.activities.WikipediaWebViewActivity"
             android:label="@string/title_activity_wikipedia_web_view" >
             <!--<meta-data-->
                 <!--android:name="android.support.PARENT_ACTIVITY"-->

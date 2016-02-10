@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <!-- Toolbar -->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_web"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorAccent"
-        android:title="@string/menu"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:title="@string/menu" />
 
     <WebView
         android:id="@+id/wikipedia_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        xmlns:android="http://schemas.android.com/apk/res/android" />
+        android:layout_weight="1" />
 
     <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ads:adUnitId="ca-app-pub-7932059771308904/6152423675"
-        ads:adSize="BANNER" />
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-7932059771308904/6152423675" />
 </LinearLayout>

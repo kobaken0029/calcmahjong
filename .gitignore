@@ -1,6 +1,11 @@
-.gradle
+# Android Studio
+.gradle/
+.idea/
+build/
+gradlew
+gradlew.bat
+settings.gradle
+*.iml
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
 .DS_Store
-/build
+/captures

@@ -1,0 +1,44 @@
+package com.kobaken0029.calcmahjong.view.dialog;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.ContextThemeWrapper;
+import android.view.View;
+import android.widget.NumberPicker;
+
+import com.kobaken0029.calcmahjong.R;
+
+public class NumberPickerDialog {
+
+
+    /**
+     * NumberPickerのダイアログを表示する。
+     * @param context コンテキスト
+     * @param numberPicker numberPicker
+     * @param minValue 最小値
+     * @param maxValue 最大値
+     * @param listener OK時のリスナー
+     */
+    public void showDialog(Context context, View view, NumberPicker numberPicker, String msg,
+                           int minValue, int maxValue, DialogInterface.OnClickListener listener) {
+        numberPicker.setMinValue(minValue);
+        numberPicker.setMaxValue(maxValue);
+        new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AppTheme))
+                .setTitle(msg)
+                .setView(view)
+                .setPositiveButton(context.getResources().getString(R.string.ok), listener != null ? listener :
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton(context.getResources().getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        })
+                .create().show();
+    }
+}
